@@ -39,7 +39,7 @@ class MenuScene: SKScene {
         let lastScore = UserDefaults.standard.integer(forKey: "LastScore")
         let formattedScore = formatScore(from: lastScore)
         
-        let lastScoreLabel = SKLabelNode(text: "Last Score: $" + (formattedScore ?? "0"))
+        let lastScoreLabel = SKLabelNode(text: "Last Score: " + (formattedScore ?? "0"))
         lastScoreLabel.fontSize = 24.0
         lastScoreLabel.fontName = "HelveticaNeue-Light"
         lastScoreLabel.fontColor = UIColor.init(red: 38/255, green: 120/255, blue: 95/255, alpha: 1)
@@ -61,7 +61,7 @@ class MenuScene: SKScene {
         let highScore = UserDefaults.standard.integer(forKey: "HighScore")
         let formattedScore = formatScore(from: highScore)
         
-        let highScoreLabel = SKLabelNode(text: "ATH: $" + (formattedScore ?? "0"))
+        let highScoreLabel = SKLabelNode(text: "Highest score: " + (formattedScore ?? "0"))
         highScoreLabel.fontSize = 24.0
         highScoreLabel.fontName = "HelveticaNeue-Bold"
         highScoreLabel.fontColor = UIColor.init(red: 38/255, green: 120/255, blue: 95/255, alpha: 1)
