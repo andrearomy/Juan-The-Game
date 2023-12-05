@@ -15,6 +15,8 @@
 		996125062B1F914B007F316D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 996125042B1F914B007F316D /* Main.storyboard */; };
 		996125082B1F914C007F316D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 996125072B1F914C007F316D /* Assets.xcassets */; };
 		9961250B2B1F914C007F316D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 996125092B1F914C007F316D /* LaunchScreen.storyboard */; };
+		996125132B1F9228007F316D /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996125122B1F9228007F316D /* MenuScene.swift */; };
+		996125162B1F926B007F316D /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996125152B1F926B007F316D /* Settings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +29,8 @@
 		996125052B1F914B007F316D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		996125072B1F914C007F316D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9961250A2B1F914C007F316D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		996125122B1F9228007F316D /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		996125152B1F926B007F316D /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,13 +66,31 @@
 				996124FA2B1F914B007F316D /* AppDelegate.swift */,
 				996124FC2B1F914B007F316D /* GameScene.sks */,
 				996124FE2B1F914B007F316D /* Actions.sks */,
-				996125002B1F914B007F316D /* GameScene.swift */,
-				996125022B1F914B007F316D /* GameViewController.swift */,
+				996125112B1F9209007F316D /* Scenes */,
+				996125142B1F9242007F316D /* Controllers */,
 				996125042B1F914B007F316D /* Main.storyboard */,
+				996125152B1F926B007F316D /* Settings.swift */,
 				996125072B1F914C007F316D /* Assets.xcassets */,
 				996125092B1F914C007F316D /* LaunchScreen.storyboard */,
 			);
 			path = "Juan-The-Game";
+			sourceTree = "<group>";
+		};
+		996125112B1F9209007F316D /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				996125002B1F914B007F316D /* GameScene.swift */,
+				996125122B1F9228007F316D /* MenuScene.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		996125142B1F9242007F316D /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				996125022B1F914B007F316D /* GameViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -145,8 +167,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				996125012B1F914B007F316D /* GameScene.swift in Sources */,
+				996125132B1F9228007F316D /* MenuScene.swift in Sources */,
 				996125032B1F914B007F316D /* GameViewController.swift in Sources */,
 				996124FB2B1F914B007F316D /* AppDelegate.swift in Sources */,
+				996125162B1F926B007F316D /* Settings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
