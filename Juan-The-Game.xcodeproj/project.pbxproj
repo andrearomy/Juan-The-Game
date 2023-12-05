@@ -71,16 +71,16 @@
 		996124F92B1F914B007F316D /* Juan-The-Game */ = {
 			isa = PBXGroup;
 			children = (
-				996EDDD22B1F957300F134B3 /* Sounds */,
 				996124FA2B1F914B007F316D /* AppDelegate.swift */,
+				996125142B1F9242007F316D /* Controllers */,
+				996125112B1F9209007F316D /* Scenes */,
 				996124FC2B1F914B007F316D /* GameScene.sks */,
 				996124FE2B1F914B007F316D /* Actions.sks */,
-				996125112B1F9209007F316D /* Scenes */,
-				996125142B1F9242007F316D /* Controllers */,
-				996125042B1F914B007F316D /* Main.storyboard */,
 				996125152B1F926B007F316D /* Settings.swift */,
-				996125072B1F914C007F316D /* Assets.xcassets */,
+				996125042B1F914B007F316D /* Main.storyboard */,
 				996125092B1F914C007F316D /* LaunchScreen.storyboard */,
+				996125072B1F914C007F316D /* Assets.xcassets */,
+				996EDDD22B1F957300F134B3 /* Sounds */,
 			);
 			path = "Juan-The-Game";
 			sourceTree = "<group>";
