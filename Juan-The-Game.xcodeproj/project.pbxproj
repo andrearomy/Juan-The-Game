@@ -19,6 +19,7 @@
 		996EDDD82B1F95D900F134B3 /* jump.wav in Resources */ = {isa = PBXBuildFile; fileRef = 996EDDD42B1F95D900F134B3 /* jump.wav */; };
 		996EDDD92B1F95D900F134B3 /* break.wav in Resources */ = {isa = PBXBuildFile; fileRef = 996EDDD52B1F95D900F134B3 /* break.wav */; };
 		996EDDDA2B1F95D900F134B3 /* gameOver.wav in Resources */ = {isa = PBXBuildFile; fileRef = 996EDDD62B1F95D900F134B3 /* gameOver.wav */; };
+		C2C7AF1C2B20954B00317321 /* SampleCode.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C2C7AF1B2B20954B00317321 /* SampleCode.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,7 @@
 		996EDDD42B1F95D900F134B3 /* jump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jump.wav; sourceTree = "<group>"; };
 		996EDDD52B1F95D900F134B3 /* break.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = break.wav; sourceTree = "<group>"; };
 		996EDDD62B1F95D900F134B3 /* gameOver.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gameOver.wav; sourceTree = "<group>"; };
+		C2C7AF1B2B20954B00317321 /* SampleCode.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = "Juan-The-Game/SampleCode.xcconfig"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				996125042B1F914B007F316D /* Main.storyboard */,
 				996125092B1F914C007F316D /* LaunchScreen.storyboard */,
 				996125072B1F914C007F316D /* Assets.xcassets */,
+				C2C7AF1B2B20954B00317321 /* SampleCode.xcconfig */,
 				996EDDD22B1F957300F134B3 /* Sounds */,
 			);
 			path = "Juan-The-Game";
@@ -172,6 +175,7 @@
 				9961250B2B1F914C007F316D /* LaunchScreen.storyboard in Resources */,
 				996EDDDA2B1F95D900F134B3 /* gameOver.wav in Resources */,
 				996EDDD72B1F95D900F134B3 /* superJump.wav in Resources */,
+				C2C7AF1C2B20954B00317321 /* SampleCode.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
