@@ -100,7 +100,7 @@ class GameScene: SKScene {
         if position.x < frame.midX {
             platform = SKSpriteNode(imageNamed: "platformLeft")
         }
-        else {
+        else { 
             platform = SKSpriteNode(imageNamed: "platformRight")
         }
         platform.position = position
