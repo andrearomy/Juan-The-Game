@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "dollarWithHoleRight.png",
+      "filename" : "bpl.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "dollarWithHoleRight@2x.png",
+      "filename" : "bpl 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "dollarWithHoleRight@3x.png",
+      "filename" : "bpl 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
