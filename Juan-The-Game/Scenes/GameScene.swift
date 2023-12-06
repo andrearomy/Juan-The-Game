@@ -98,10 +98,10 @@ class GameScene: SKScene {
     func spawnPlatform(at position: CGPoint) {
         var platform = SKSpriteNode()
         if position.x < frame.midX {
-            platform = SKSpriteNode(imageNamed: "dollarLeft")
+            platform = SKSpriteNode(imageNamed: "platformLeft")
         }
         else {
-            platform = SKSpriteNode(imageNamed: "dollarRight")
+            platform = SKSpriteNode(imageNamed: "platformRight")
         }
         platform.position = position
         platform.zPosition = ZPositions.platform
@@ -248,7 +248,7 @@ class GameScene: SKScene {
             platform.physicsBody?.categoryBitMask = PhysicsCategories.dollarWithHoleCategory
         }
         else {
-            platform.texture = SKTexture(imageNamed: "dollar" + direction)
+            platform.texture = SKTexture(imageNamed: "platform" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
         }
