@@ -35,7 +35,7 @@ class GameScene: SKScene {
     func layoutScene() {
         addBackground()
         addScoreCounter()
-        spawnBall()
+        spawnHorse()
         addBottom()
         makePlatforms()
     }
@@ -50,19 +50,20 @@ class GameScene: SKScene {
         }
     
     func addScoreCounter() {
-        scoreLabel.fontSize = 24.0
+        scoreLabel.fontSize = 30.0
         scoreLabel.fontName = "HelveticaNeue-Bold"
-        scoreLabel.fontColor = UIColor.init(red: 38/255, green: 120/255, blue: 95/255, alpha: 1)
+        scoreLabel.fontColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         scoreLabel.verticalAlignmentMode = .center
-        scoreLabel.horizontalAlignmentMode = .left
+        scoreLabel.horizontalAlignmentMode = .center // Set to center
         
-        // Position scoreLabel on the left side of the screen
-        scoreLabel.position = CGPoint(x: 20, y: frame.height - (view?.safeAreaInsets.top ?? 10) - 20)
+        // Position scoreLabel at the top center of the screen
+        scoreLabel.position = CGPoint(x: frame.midX, y: frame.height - (view?.safeAreaInsets.top ?? 10) - 20)
         scoreLabel.zPosition = ZPositions.scoreLabel
         addChild(scoreLabel)
     }
+
     
-    func spawnBall() {
+    func spawnHorse() {
         horse.name = "Juan"
         horse.position = CGPoint(x: frame.midX, y: 20 + horse.size.height/2)
         horse.zPosition = ZPositions.horse
@@ -116,7 +117,7 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         checkPhoneTilt()
         if isGameStarted {
-            checkBallPosition()
+            checkHorsePosition()
             checkHorseVelocity()
             updatePlatformsPositions()
         }
@@ -142,7 +143,7 @@ class GameScene: SKScene {
         }
     }
     
-    func checkBallPosition() {
+    func checkHorsePosition() {
         let horseWidth = horse.size.width
         if horse.position.y+horseWidth < 0 {
             run(SKAction.playSoundFileNamed("gameOver", waitForCompletion: false))
@@ -168,13 +169,10 @@ class GameScene: SKScene {
         score = (Int(horse.position.y) - Int(horse.size.height/2)) - (Int(bottom.position.y) - Int(bottom.frame.size.height)/2)
         score = score < 0 ? 0 : score
         if score > oldScore {
-            scoreLabel.fontColor = UIColor.init(red: 38/255, green: 120/255, blue: 95/255, alpha: 1)
+            scoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
             if score > highestScore {
                 highestScore = score
             }
-        }
-        else {
-            scoreLabel.fontColor = UIColor.init(red: 136/255, green: 24/255, blue: 0/255, alpha: 1)
         }
         
         let numberFormatter = NumberFormatter()
@@ -186,27 +184,27 @@ class GameScene: SKScene {
     
     func checkHorseVelocity() {
         if let horseVelocity = horse.physicsBody?.velocity.dx {
-            if horseVelocity > 1000 {
-                horse.physicsBody?.velocity.dx = 1000
+            if horseVelocity > 700 {
+                horse.physicsBody?.velocity.dx = 700
             }
-            else if horseVelocity < -1000 {
-                horse.physicsBody?.velocity.dx = -1000
+            else if horseVelocity < -700 {
+                horse.physicsBody?.velocity.dx = -700
             }
         }
     }
     
     func updatePlatformsPositions() {
         var minimumHeight: CGFloat = frame.size.height/2
-        guard let ballVelocity = horse.physicsBody?.velocity.dy else {
+        guard let horseVelocity = horse.physicsBody?.velocity.dy else {
             return
         }
-        var distance = ballVelocity/50
+        var distance = horseVelocity/50
         if isSuperJumpOn {
             minimumHeight = 0
             distance = 30 - superJumpCounter
             superJumpCounter += 0.16
         }
-        if horse.position.y > minimumHeight && ballVelocity > 0 {
+        if horse.position.y > minimumHeight && horseVelocity > 0 {
             for platform in platforms {
                 platform.position.y -= distance
                 if platform.position.y < 0-platform.frame.size.height/2 {
@@ -311,7 +309,7 @@ extension GameScene: SKPhysicsContactDelegate {
                     run(playJumpSound)
                     run(playBreakSound)
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
-                    if let platform = (contact.bodyA.node?.name != "Ball") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
+                    if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
                         platform.physicsBody?.categoryBitMask = PhysicsCategories.none
                         platform.run(SKAction.fadeOut(withDuration: 0.5))
                     }

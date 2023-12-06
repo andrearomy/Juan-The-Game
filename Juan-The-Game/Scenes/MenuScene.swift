@@ -42,7 +42,7 @@ class MenuScene: SKScene {
         let lastScoreLabel = SKLabelNode(text: "Last Score: " + (formattedScore ?? "0"))
         lastScoreLabel.fontSize = 24.0
         lastScoreLabel.fontName = "HelveticaNeue-Light"
-        lastScoreLabel.fontColor = UIColor.init(red: 38/255, green: 120/255, blue: 95/255, alpha: 1)
+        lastScoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         lastScoreLabel.position = CGPoint(x: frame.midX, y: logo.position.y - logo.size.height/2 - 20)
         lastScoreLabel.zPosition = ZPositions.scoreLabel
         addChild(lastScoreLabel)
@@ -64,7 +64,7 @@ class MenuScene: SKScene {
         let highScoreLabel = SKLabelNode(text: "Highest score: " + (formattedScore ?? "0"))
         highScoreLabel.fontSize = 24.0
         highScoreLabel.fontName = "HelveticaNeue-Bold"
-        highScoreLabel.fontColor = UIColor.init(red: 38/255, green: 120/255, blue: 95/255, alpha: 1)
+        highScoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         highScoreLabel.position = CGPoint(x: frame.midX, y: logo.position.y - logo.size.height/2 - 52)
         highScoreLabel.zPosition = ZPositions.scoreLabel
         addChild(highScoreLabel)
