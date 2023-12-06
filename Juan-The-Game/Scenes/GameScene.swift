@@ -105,7 +105,7 @@ class GameScene: SKScene {
         }
         platform.position = position
         platform.zPosition = ZPositions.platform
-        platform.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: platform.size.width, height: platform.size.height))
+        platform.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: platform.size.width, height: platform.size.height/20))
         platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
         platform.physicsBody?.isDynamic = false
         platform.physicsBody?.affectedByGravity = false
@@ -259,7 +259,7 @@ class GameScene: SKScene {
     func updateSizeOf(platform: SKSpriteNode) {
         if let textureSize = platform.texture?.size() {
             platform.size = CGSize(width: textureSize.width, height: textureSize.height)
-            platform.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: platform.size.width, height: platform.size.height))
+            platform.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: platform.size.width, height: platform.size.height/20))
             platform.physicsBody?.isDynamic = false
             platform.physicsBody?.affectedByGravity = false
         }
