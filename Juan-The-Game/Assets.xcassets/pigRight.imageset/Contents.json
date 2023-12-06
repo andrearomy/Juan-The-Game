@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "strapOfDollarsLeft.png",
+      "filename" : "pig1 2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "strapOfDollarsLeft@2x.png",
+      "filename" : "pig2 3.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "strapOfDollarsLeft@3x.png",
+      "filename" : "pig3 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

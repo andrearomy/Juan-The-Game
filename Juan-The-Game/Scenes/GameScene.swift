@@ -14,7 +14,6 @@ class GameScene: SKScene {
     let horse = SKSpriteNode(imageNamed: "horse")
     var platforms = [SKSpriteNode]()
     var bottom = SKShapeNode()
-    let platform1 = SKSpriteNode(imageNamed: "platform1")
     let scoreLabel = SKLabelNode(text: "Score: 0")
     var score = 0
     var highestScore = 0
@@ -231,7 +230,7 @@ class GameScene: SKScene {
             platform.physicsBody?.categoryBitMask = PhysicsCategories.duck
         }
         else if Int.random(in: 1...5) == 1 {
-            platform.texture = SKTexture(imageNamed: "strapOfDollars" + direction)
+            platform.texture = SKTexture(imageNamed: "pig" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
             if direction == "Left" {

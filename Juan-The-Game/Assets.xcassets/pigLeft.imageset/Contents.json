@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "dollar.png",
+      "filename" : "pig1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "dollar@2x.png",
+      "filename" : "pig2 2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "dollar@3x.png",
+      "filename" : "pig3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
