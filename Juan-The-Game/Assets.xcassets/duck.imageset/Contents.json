@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "duck.png",
+      "filename" : "duck1.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "duck 1.png",
+      "filename" : "duck2.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "duck 2.png",
+      "filename" : "duck3.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
