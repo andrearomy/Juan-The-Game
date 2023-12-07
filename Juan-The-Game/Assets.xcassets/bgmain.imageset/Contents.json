@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "pig1.png",
+      "filename" : "bgmainpixel.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "pig2 2.png",
+      "filename" : "bgmainpixel 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "pig3.png",
+      "filename" : "bgmainpixel 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

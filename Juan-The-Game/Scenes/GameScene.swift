@@ -40,13 +40,19 @@ class GameScene: SKScene {
     }
     
     func addBackground() {
-            let background = SKSpriteNode(imageNamed: "background")
-            background.position = CGPoint(x: frame.midX, y: frame.midY)
-    //        background.size = background.texture!.size()
-            background.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
-            background.zPosition = ZPositions.background
-            addChild(background)
-        }
+        let background = SKSpriteNode(imageNamed: "background")
+        background.position = CGPoint(x: frame.midX, y: 2120)
+//        background.size = background.texture!.size()
+        
+        background.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 5)
+        background.zPosition = ZPositions.background
+        
+        background.name = "background" // Assegna un nome univoco
+        
+        addChild(background)
+    }
+
+
     
     func addScoreCounter() {
         scoreLabel.fontSize = 30.0
@@ -60,7 +66,7 @@ class GameScene: SKScene {
         scoreLabel.zPosition = ZPositions.scoreLabel
         addChild(scoreLabel)
     }
-
+    
     
     func spawnHorse() {
         horse.name = "Juan"
@@ -100,7 +106,7 @@ class GameScene: SKScene {
         if position.x < frame.midX {
             platform = SKSpriteNode(imageNamed: "platformLeft")
         }
-        else { 
+        else {
             platform = SKSpriteNode(imageNamed: "platformRight")
         }
         platform.position = position
@@ -211,6 +217,10 @@ class GameScene: SKScene {
                 }
             }
             bottom.position.y -= distance
+            
+            if let background = childNode(withName: "background") as? SKSpriteNode {
+                background.position.y -= distance
+            }
         }
     }
     
@@ -230,7 +240,7 @@ class GameScene: SKScene {
             platform.physicsBody?.categoryBitMask = PhysicsCategories.duck
         }
         else if Int.random(in: 1...5) == 1 {
-            platform.texture = SKTexture(imageNamed: "pig" + direction)
+            platform.texture = SKTexture(imageNamed: "cloud" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
             if direction == "Left" {
@@ -291,7 +301,7 @@ class GameScene: SKScene {
             run(playJumpSound)
         }
     }
-
+    
 }
 
 extension GameScene: SKPhysicsContactDelegate {

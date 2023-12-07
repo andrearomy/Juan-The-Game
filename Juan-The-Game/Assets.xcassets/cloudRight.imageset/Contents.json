@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "bgmainpixell.png",
+      "filename" : "cloud2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "bgmainpixell 1.png",
+      "filename" : "cloud2 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "bgmainpixell 2.png",
+      "filename" : "cloud2 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

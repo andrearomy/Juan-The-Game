@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "playButton.png",
+      "filename" : "playbutton.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "playButton@2x.png",
+      "filename" : "playbutton 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "playButton@3x.png",
+      "filename" : "playbutton 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
