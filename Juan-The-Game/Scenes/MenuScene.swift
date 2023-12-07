@@ -111,6 +111,7 @@ class MenuScene: SKScene {
 
     func playButtonTapped() {
         let gameScene = GameScene(size: view!.bounds.size)
+//        let gameScene = GameScene_editBg(size: view!.bounds.size)
         view?.presentScene(gameScene)
     }
 
