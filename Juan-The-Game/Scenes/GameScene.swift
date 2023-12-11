@@ -22,7 +22,7 @@ class GameScene: SKScene {
     let playBreakSound = SKAction.playSoundFileNamed("break", waitForCompletion: false)
     var isSuperJumpOn = false
     var superJumpCounter: CGFloat = 0
-    var playGameMusic = SKAction.playSoundFileNamed("gameMusic", waitForCompletion: true)
+    var playGameMusic = SKAction.playSoundFileNamed("gameMusic", waitForCompletion: false)
 
     
     override func didMove(to view: SKView) {
@@ -42,6 +42,8 @@ class GameScene: SKScene {
     }
     
     func addBackground() {
+        
+        
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: frame.midX, y: 2120)
 //        background.size = background.texture!.size()
@@ -155,7 +157,9 @@ class GameScene: SKScene {
         if horse.position.y+horseWidth < 0 {
             run(SKAction.playSoundFileNamed("gameOver", waitForCompletion: false))
             saveScore()
+            self.removeAllActions()
             let menuScene = MenuScene.init(size: view!.bounds.size)
+            
             view?.presentScene(menuScene)
         }
         setScore()
@@ -301,7 +305,6 @@ class GameScene: SKScene {
             horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
             isGameStarted = true
             run(playJumpSound)
-            run(playGameMusic)
         }
     }
     

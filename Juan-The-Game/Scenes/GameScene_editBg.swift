@@ -2,8 +2,6 @@
 //  GameScene.swift
 //  Juan-The-Game
 //
-//  Created by Andrea Romano on 05/12/23.
-//
 
 import SpriteKit
 import CoreMotion
@@ -40,7 +38,8 @@ class GameScene_editBg: SKScene {
     }
     
     func addBackground() {
-        /*
+        
+        
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: frame.midX, y: 2120)
 //        background.size = background.texture!.size()
@@ -51,15 +50,6 @@ class GameScene_editBg: SKScene {
         background.name = "background" // Assegna un nome univoco
         
         addChild(background)
-         */
-        let backgroundColor = UIColor(red: 25/255, green: 105/255, blue: 81/255, alpha: 1)
-        let background = SKSpriteNode(color: backgroundColor, size: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 5))
-        background.position = CGPoint(x: frame.midX, y: 2120)
-        background.zPosition = ZPositions.background
-        background.name = "background"
-        
-        addChild(background)
-        
     }
 
 
@@ -209,8 +199,6 @@ class GameScene_editBg: SKScene {
     }
     
     func updatePlatformsPositions() {
-        var currentBackgroundColor = UIColor(red: 25/255, green: 105/255, blue: 81/255, alpha: 1)
-
         var minimumHeight: CGFloat = frame.size.height/2
         guard let horseVelocity = horse.physicsBody?.velocity.dy else {
             return
@@ -233,16 +221,6 @@ class GameScene_editBg: SKScene {
             if let background = childNode(withName: "background") as? SKSpriteNode {
                 background.position.y -= distance
             }
-        }
-        if score >= 3000 {
-            currentBackgroundColor = UIColor.red
-//            changeBackgroundColor(to: currentBackgroundColor)
-        }
-    }
-    
-    func changeBackgroundColor(to color: UIColor) {
-        if let background = childNode(withName: "background") as? SKSpriteNode {
-            background.run(SKAction.colorize(with: color, colorBlendFactor: 1.0, duration: 0.5))
         }
     }
     

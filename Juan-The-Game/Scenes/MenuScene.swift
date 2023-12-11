@@ -10,6 +10,7 @@ import SpriteKit
 class MenuScene: SKScene {
     
     let logo = SKSpriteNode(imageNamed: "logo")
+    var playGameMusic = SKAction.playSoundFileNamed("gameMusic", waitForCompletion: false)
     
     override func didMove(to view: SKView) {
         addBackground()
@@ -26,6 +27,7 @@ class MenuScene: SKScene {
             background.size = self.size
             background.zPosition = ZPositions.background
             addChild(background)
+           
         }
     
     func addLogo() {
@@ -53,6 +55,10 @@ class MenuScene: SKScene {
         lastScoreLabel.zPosition = CGFloat.greatestFiniteMagnitude
 //        lastScoreLabel.zPosition = ZPositions.scoreLabel
         addChild(lastScoreLabel)
+        
+        if action(forKey: "gameMusic") != nil {
+            removeAction(forKey: "gameMusic")
+        }
         
     }
     
@@ -111,6 +117,8 @@ class MenuScene: SKScene {
 
     func playButtonTapped() {
         let gameScene = GameScene(size: view!.bounds.size)
+        
+        run(playGameMusic, withKey: "gameMusic")
 //        let gameScene = GameScene_editBg(size: view!.bounds.size)
         view?.presentScene(gameScene)
     }
