@@ -22,6 +22,8 @@ class GameScene: SKScene {
     let playBreakSound = SKAction.playSoundFileNamed("break", waitForCompletion: false)
     var isSuperJumpOn = false
     var superJumpCounter: CGFloat = 0
+    var playGameMusic = SKAction.playSoundFileNamed("gameMusic", waitForCompletion: true)
+
     
     override func didMove(to view: SKView) {
         motionManager = CMMotionManager()
@@ -299,6 +301,7 @@ class GameScene: SKScene {
             horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
             isGameStarted = true
             run(playJumpSound)
+            run(playGameMusic)
         }
     }
     
