@@ -2,8 +2,6 @@
 //  GameScene.swift
 //  Juan-The-Game
 //
-//  Created by Andrea Romano on 05/12/23.
-//
 
 import SpriteKit
 import CoreMotion
@@ -24,6 +22,18 @@ class GameScene: SKScene {
     var superJumpCounter: CGFloat = 0
     var playGameMusic = SKAudioNode(fileNamed: "gameMusic")
     
+    var pausePanel: SKSpriteNode?
+
+    
+    
+    enum ZPositions {
+        static let background: CGFloat = 0
+        static let platform: CGFloat = 1
+        static let horse: CGFloat = 2
+        static let scoreLabel: CGFloat = 3
+        static let ui: CGFloat = 4  // Aggiunto per il pulsante di pausa
+        // Aggiungi altri membri se necessario
+    }
     
     override func didMove(to view: SKView) {
         motionManager = CMMotionManager()
@@ -40,6 +50,15 @@ class GameScene: SKScene {
         spawnHorse()
         addBottom()
         makePlatforms()
+        
+        // Pause button
+        let pauseButton = SKSpriteNode(imageNamed: "pauseButton")
+        pauseButton.setScale(0.03)
+        pauseButton.position = CGPoint(x: frame.width - 45, y: frame.height - 65)
+        pauseButton.zPosition = ZPositions.ui
+        pauseButton.name = "Pause"
+        addChild(pauseButton)
+
     }
     
     func addBackground() {
@@ -311,16 +330,63 @@ class GameScene: SKScene {
         }
     }
     
+    func pauseGame() {
+        isPaused = true
+        playGameMusic.run(SKAction.pause())
+    }
+    
+    func createPausePanel() {
+        // Panel
+        pausePanel = SKSpriteNode(color: UIColor.black.withAlphaComponent(0.7), size: CGSize(width: frame.width, height: frame.height))
+        pausePanel?.position = CGPoint(x: frame.midX, y: frame.midY)
+        pausePanel?.zPosition = ZPositions.ui + 1
+        addChild(pausePanel!)
+
+        // Add here other items for example mute song
+
+        // Resume Button
+        let resumeButton = SKSpriteNode(imageNamed: "resumeButton")
+        resumeButton.setScale(0.08)
+        resumeButton.zPosition = ZPositions.ui + 2
+        resumeButton.name = "Resume"
+        pausePanel?.addChild(resumeButton)
+    }
+
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !isGameStarted {
+        super.touchesBegan(touches, with: event)
+        guard let touch = touches.first else { return }
+        let node = atPoint(touch.location(in: self))
+
+        if node.name == "Pause" {
+            if isPaused {
+                // Riprendi il gioco se è già in pausa
+                isPaused = false
+                playGameMusic.run(SKAction.play())
+                pausePanel?.removeFromParent() // Rimuovi il pannello di pausa
+                // Aggiungi altre azioni di ripresa se necessario
+            } else {
+                // Metti in pausa il gioco se non è in pausa
+                isPaused = true
+                playGameMusic.run(SKAction.pause())
+                createPausePanel() // Crea il pannello di pausa
+                // Aggiungi altre azioni di pausa se necessario
+            }
+        } else if node.name == "Resume" {
+            // Riprendi il gioco se il pulsante di ripresa è premuto nel pannello di pausa
+            isPaused = false
+            playGameMusic.run(SKAction.play())
+            pausePanel?.removeFromParent() // Rimuovi il pannello di pausa
+            // Aggiungi altre azioni di ripresa se necessario
+        } else if !isGameStarted {
             horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
             isGameStarted = true
             run(playJumpSound)
-            
-//            addChild(playGameMusic)
-//            run(playGameMusic, withKey: "gameMusic")
+            // Aggiungi altre azioni di inizio gioco se necessario
         }
     }
+
+
     
 }
 
