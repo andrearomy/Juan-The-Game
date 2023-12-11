@@ -22,7 +22,7 @@ class GameScene: SKScene {
     let playBreakSound = SKAction.playSoundFileNamed("break", waitForCompletion: false)
     var isSuperJumpOn = false
     var superJumpCounter: CGFloat = 0
-    var playGameMusic = SKAction.playSoundFileNamed("gameMusic", waitForCompletion: false)
+    var playGameMusic = SKAudioNode(fileNamed: "gameMusic")
 
     
     override func didMove(to view: SKView) {
@@ -155,9 +155,11 @@ class GameScene: SKScene {
     func checkHorsePosition() {
         let horseWidth = horse.size.width
         if horse.position.y+horseWidth < 0 {
+//            self.removeAllActions()
+            playGameMusic.run(SKAction.stop())
+            
             run(SKAction.playSoundFileNamed("gameOver", waitForCompletion: false))
             saveScore()
-            self.removeAllActions()
             let menuScene = MenuScene.init(size: view!.bounds.size)
             
             view?.presentScene(menuScene)
@@ -305,6 +307,8 @@ class GameScene: SKScene {
             horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
             isGameStarted = true
             run(playJumpSound)
+            addChild(playGameMusic)
+//            run(playGameMusic, withKey: "gameMusic")
         }
     }
     
