@@ -84,12 +84,12 @@ class MenuScene: SKScene {
     }
 
     func addPlayButton() {
-        let playButton = SKSpriteNode(imageNamed: "playbutton1")
+        let playButton = SKSpriteNode(imageNamed: "playButton1")
         playButton.position = CGPoint(x: frame.midX, y: frame.midY / 4)
         playButton.zPosition = ZPositions.logo
         addChild(playButton)
         
-        playButton.name = "playbutton1"
+        playButton.name = "playButton1"
         
         let buttonAnimation = createButtonAnimation()
             playButton.run(buttonAnimation)
@@ -108,14 +108,14 @@ class MenuScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             
-            if touchedNode.name == "playbutton1" {
+            if touchedNode.name == "playButton1" {
                 playButtonTapped()
             }
         }
     }
     
     func createButtonAnimation() -> SKAction {
-        let buttonFrames = ["playbutton1", "playbutton2"]
+        let buttonFrames = ["playButton1", "playButton2"]
         
         var frames: [SKTexture] = []
         for frameName in buttonFrames {
