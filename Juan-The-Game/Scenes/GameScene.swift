@@ -23,7 +23,7 @@ class GameScene: SKScene {
     var isSuperJumpOn = false
     var superJumpCounter: CGFloat = 0
     var playGameMusic = SKAudioNode(fileNamed: "gameMusic")
-
+    
     
     override func didMove(to view: SKView) {
         motionManager = CMMotionManager()
@@ -34,6 +34,7 @@ class GameScene: SKScene {
     }
     
     func layoutScene() {
+        addChild(playGameMusic)
         addBackground()
         addScoreCounter()
         spawnHorse()
@@ -126,6 +127,8 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         checkPhoneTilt()
         if isGameStarted {
+            
+//            addChild(playGameMusic)
             checkHorsePosition()
             checkHorseVelocity()
             updatePlatformsPositions()
@@ -307,7 +310,8 @@ class GameScene: SKScene {
             horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
             isGameStarted = true
             run(playJumpSound)
-            addChild(playGameMusic)
+            
+//            addChild(playGameMusic)
 //            run(playGameMusic, withKey: "gameMusic")
         }
     }
