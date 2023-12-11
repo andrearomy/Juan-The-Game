@@ -60,8 +60,14 @@ class GameScene: SKScene {
 
     
     func addScoreCounter() {
+//        for name in UIFont.familyNames {
+//            print(name)
+//            if let nameString = name as? String {
+//                print(UIFont.fontNames(forFamilyName: nameString))
+//            }
+//        }
         scoreLabel.fontSize = 30.0
-        scoreLabel.fontName = "HelveticaNeue-Bold"
+        scoreLabel.fontName = "Minecraftia-Regular"
         scoreLabel.fontColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         scoreLabel.verticalAlignmentMode = .center
         scoreLabel.horizontalAlignmentMode = .center // Set to center

@@ -47,8 +47,8 @@ class MenuScene: SKScene {
         let formattedScore = formatScore(from: lastScore)
         
         let lastScoreLabel = SKLabelNode(text: "Last Score: " + (formattedScore ?? "0"))
-        lastScoreLabel.fontSize = 24.0
-        lastScoreLabel.fontName = "HelveticaNeue-Light"
+        lastScoreLabel.fontSize = 18.0
+        lastScoreLabel.fontName = "Minecraftia-Regular"
         lastScoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         lastScoreLabel.position = CGPoint(x: frame.midX, y: topPosition - (logo.size.height/8) - 15)
 //        lastScoreLabel.position = CGPoint(x: frame.midX, y: logo.position.y - logo.size.height/2 - 20)
@@ -72,9 +72,9 @@ class MenuScene: SKScene {
         let highScore = UserDefaults.standard.integer(forKey: "HighScore")
         let formattedScore = formatScore(from: highScore)
         
-        let highScoreLabel = SKLabelNode(text: "Highest score: " + (formattedScore ?? "0"))
+        let highScoreLabel = SKLabelNode(text: "Highest Score: " + (formattedScore ?? "0"))
         highScoreLabel.fontSize = 24.0
-        highScoreLabel.fontName = "HelveticaNeue-Bold"
+        highScoreLabel.fontName = "Minecraftia-Regular"
         highScoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         highScoreLabel.position = CGPoint(x: frame.midX, y: topPosition - (logo.size.height/8) - 55)
 //        highScoreLabel.position = CGPoint(x: frame.midX, y: logo.position.y - logo.size.height/2 - 52)
@@ -84,12 +84,12 @@ class MenuScene: SKScene {
     }
 
     func addPlayButton() {
-        let playButton = SKSpriteNode(imageNamed: "playButton")
+        let playButton = SKSpriteNode(imageNamed: "playButton1")
         playButton.position = CGPoint(x: frame.midX, y: frame.midY / 4)
         playButton.zPosition = ZPositions.logo
         addChild(playButton)
         
-        playButton.name = "playButton"
+        playButton.name = "playButton1"
     }
     
     /*
@@ -105,7 +105,7 @@ class MenuScene: SKScene {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
             
-            if touchedNode.name == "playButton" {
+            if touchedNode.name == "playButton1" {
                 playButtonTapped()
             }
         }
