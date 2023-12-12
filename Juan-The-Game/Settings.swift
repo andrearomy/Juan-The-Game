@@ -13,6 +13,8 @@ enum PhysicsCategories {
     static let platformCategory: UInt32 = 0x1 << 1
     static let dollarWithHoleCategory: UInt32 = 0x1 << 2
     static let duck: UInt32 = 0x1 << 3
+    static let birdCategory: UInt32 = 0x1 << 5
+    
 }
 
 enum ZPositions {

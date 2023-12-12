@@ -21,6 +21,8 @@ class GameScene: SKScene {
     var isSuperJumpOn = false
     var superJumpCounter: CGFloat = 0
     var playGameMusic = SKAudioNode(fileNamed: "gameMusic")
+    var isInverted = false
+
     
     var pausePanel: SKSpriteNode?
 
@@ -31,6 +33,7 @@ class GameScene: SKScene {
         static let platform: CGFloat = 1
         static let horse: CGFloat = 2
         static let scoreLabel: CGFloat = 3
+        static let uccello: CGFloat = 5
         static let ui: CGFloat = 4  // Aggiunto per il pulsante di pausa
         // Aggiungi altri membri se necessario
     }
@@ -105,7 +108,7 @@ class GameScene: SKScene {
         horse.physicsBody = SKPhysicsBody(circleOfRadius: horse.size.width/2)
         horse.physicsBody?.affectedByGravity = true
         horse.physicsBody?.categoryBitMask = PhysicsCategories.horseCategory
-        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.dollarWithHoleCategory | PhysicsCategories.duck
+        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.dollarWithHoleCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory
         horse.physicsBody?.collisionBitMask = PhysicsCategories.none
         addChild(horse)
     }
@@ -164,18 +167,26 @@ class GameScene: SKScene {
         var defaultAcceleration = 9.8
         if let accelerometerData = motionManager.accelerometerData {
             var xAcceleration = accelerometerData.acceleration.x * 20
-            if xAcceleration > defaultAcceleration {
-                xAcceleration = defaultAcceleration
+                if xAcceleration > defaultAcceleration {
+                    xAcceleration = -defaultAcceleration
+                }
+                else if xAcceleration < -defaultAcceleration {
+                    xAcceleration = defaultAcceleration
+                }
+            if isInverted{
+                horse.run(SKAction.rotate(toAngle: -CGFloat(-xAcceleration/5), duration: 0.15))
+            }else{
+                horse.run(SKAction.rotate(toAngle: CGFloat(-xAcceleration/5), duration: 0.15))
             }
-            else if xAcceleration < -defaultAcceleration {
-                xAcceleration = -defaultAcceleration
-            }
-            horse.run(SKAction.rotate(toAngle: CGFloat(-xAcceleration/5), duration: 0.15))
             if isGameStarted {
                 if isSuperJumpOn {
                     defaultAcceleration = -0.1
                 }
-                physicsWorld.gravity = CGVector(dx: xAcceleration, dy: -defaultAcceleration)
+                if isInverted{
+                    physicsWorld.gravity = CGVector(dx: -xAcceleration, dy: -defaultAcceleration)
+                }else{
+                    physicsWorld.gravity = CGVector(dx: xAcceleration, dy: -defaultAcceleration)
+                }
             }
         }
     }
@@ -289,6 +300,19 @@ class GameScene: SKScene {
             }
         }
         else if Int.random(in: 1...5) == 1 {
+                platform.texture = SKTexture(imageNamed: "platformBird" + direction)
+                updateSizeOf(platform: platform)
+                platform.physicsBody?.categoryBitMask = PhysicsCategories.birdCategory
+            if direction == "Left" {
+                platform.position.x = 0
+                animate(platform: platform, isLeft: true)
+            }
+            else {
+                platform.position.x = frame.size.width
+                animate(platform: platform, isLeft: false)
+            }
+            }
+        else if Int.random(in: 1...5) == 1 {
             platform.texture = SKTexture(imageNamed: "dollarWithHole" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.dollarWithHoleCategory
@@ -298,6 +322,7 @@ class GameScene: SKScene {
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
         }
+        
         
         platform.position.y = frame.size.height + platform.frame.size.height/2 + platform.position.y
     }
@@ -416,6 +441,20 @@ extension GameScene: SKPhysicsContactDelegate {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                         self.isSuperJumpOn = false
                         self.superJumpCounter = 0
+                    }
+                }
+                else if contactMask == PhysicsCategories.birdCategory | PhysicsCategories.horseCategory{
+                    isInverted = true
+                    print("procodio")
+                    run(playJumpSound)
+                    run(playBreakSound)
+                    horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
+                    if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
+                        platform.physicsBody?.categoryBitMask = PhysicsCategories.none
+                        platform.run(SKAction.fadeOut(withDuration: 0.5))
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                        self.isInverted = false
                     }
                 }
             }
