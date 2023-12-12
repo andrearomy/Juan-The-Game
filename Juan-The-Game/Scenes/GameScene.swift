@@ -125,7 +125,7 @@ class GameScene: SKScene {
         horse.physicsBody = SKPhysicsBody(circleOfRadius: horse.size.width/2)
         horse.physicsBody?.affectedByGravity = true
         horse.physicsBody?.categoryBitMask = PhysicsCategories.horseCategory
-        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory | PhysicsCategories.duck2
+        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory | PhysicsCategories.duck2 | PhysicsCategories.duck3
         horse.physicsBody?.collisionBitMask = PhysicsCategories.none
         addChild(horse)
     }
@@ -297,7 +297,7 @@ class GameScene: SKScene {
         
         platform.removeAllActions()
         platform.alpha = 1.0
-        if Int.random(in: 1...38) == 1 {
+        if Int.random(in: 1...35) == 1 {
             platform.texture = SKTexture(imageNamed: "duck")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.duck
@@ -307,7 +307,12 @@ class GameScene: SKScene {
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.duck2
         }
-        else if Int.random(in: 1...5) == 1 {
+        else if Int.random(in: 1...100) == 1 {
+            platform.texture = SKTexture(imageNamed: "duck3")
+            updateSizeOf(platform: platform)
+            platform.physicsBody?.categoryBitMask = PhysicsCategories.duck3
+        }
+        else if Int.random(in: 1...6) == 1 {
             platform.texture = SKTexture(imageNamed: "pig" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
@@ -320,7 +325,7 @@ class GameScene: SKScene {
                 animate(platform: platform, isLeft: false)
             }
         }
-        else if Int.random(in: 1...30) == 1 {
+        else if Int.random(in: 1...20) == 1 {
                 platform.texture = SKTexture(imageNamed: "platformBird" + direction)
                 updateSizeOf(platform: platform)
                 platform.physicsBody?.categoryBitMask = PhysicsCategories.birdCategory
@@ -469,6 +474,16 @@ extension GameScene: SKPhysicsContactDelegate {
                     horse.physicsBody?.velocity.dy = 10
                     isSuperJumpOn = true
                     superJumpCounter = -10
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                        self.isSuperJumpOn = false
+                        self.superJumpCounter = 0
+                    }
+                }
+                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck3 {
+                    run(SKAction.playSoundFileNamed("superJump", waitForCompletion: false))
+                    horse.physicsBody?.velocity.dy = 10
+                    isSuperJumpOn = true
+                    superJumpCounter = -25
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                         self.isSuperJumpOn = false
                         self.superJumpCounter = 0
