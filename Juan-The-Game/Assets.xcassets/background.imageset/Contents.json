@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "megabg.png",
+      "filename" : "final-bg-2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "megabg 1.png",
+      "filename" : "final-bg-2 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "megabg 2.png",
+      "filename" : "final-bg-2 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

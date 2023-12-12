@@ -96,6 +96,8 @@ class MenuScene: SKScene {
     }
     
     /*
+     Velocità accellerometro
+     
         OLD CODE:
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
             let gameScene = GameScene(size: view!.bounds.size)

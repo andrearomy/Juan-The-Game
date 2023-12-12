@@ -68,13 +68,24 @@ class GameScene: SKScene {
         
         
         let background = SKSpriteNode(imageNamed: "background")
-        background.position = CGPoint(x: frame.midX, y: 2120)
-        //        background.size = background.texture!.size()
+//        background.position = CGPoint(x: frame.midX, y: 2120)
         
-        background.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 5)
+        background.position = CGPoint(x: frame.midX, y: 6500)
+//        background.size = background.texture!.size()
+        
+//        background.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 5)
         background.zPosition = ZPositions.background
         
         background.name = "background" // Assegna un nome univoco
+        
+        let originalWidth = background.texture?.size().width ?? 1
+        let originalHeight = background.texture?.size().height ?? 1
+        
+        let targetWidth = UIScreen.main.bounds.width
+        let targetHeight = targetWidth / originalWidth * originalHeight
+        
+        background.size = CGSize(width: targetWidth, height: targetHeight)
+        
         
         addChild(background)
     }
