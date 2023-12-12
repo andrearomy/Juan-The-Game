@@ -28,15 +28,15 @@ class GameScene: SKScene {
 
     
     
-    enum ZPositions {
-        static let background: CGFloat = 0
-        static let platform: CGFloat = 1
-        static let horse: CGFloat = 2
-        static let scoreLabel: CGFloat = 3
-        static let uccello: CGFloat = 5
-        static let ui: CGFloat = 4  // Aggiunto per il pulsante di pausa
-        // Aggiungi altri membri se necessario
-    }
+//    enum ZPositions {
+//        static let background: CGFloat = 0
+//        static let platform: CGFloat = 1
+//        static let horse: CGFloat = 2
+//        static let scoreLabel: CGFloat = 3
+//        static let uccello: CGFloat = 5
+//        static let ui: CGFloat = 4  // Aggiunto per il pulsante di pausa
+//        // Aggiungi altri membri se necessario
+//    }
     
     override func didMove(to view: SKView) {
         motionManager = CMMotionManager()
@@ -44,6 +44,13 @@ class GameScene: SKScene {
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         layoutScene()
+        
+        isPaused = UserDefaults.standard.bool(forKey: "isPaused")
+        
+        if isPaused {
+            pauseGame()
+            createPausePanel()
+        }
     }
     
     func layoutScene() {
@@ -391,7 +398,7 @@ class GameScene: SKScene {
         super.touchesBegan(touches, with: event)
         guard let touch = touches.first else { return }
         let node = atPoint(touch.location(in: self))
-
+        
         if node.name == "Pause" {
             if isPaused {
                 // Riprendi il gioco se è già in pausa
@@ -419,7 +426,7 @@ class GameScene: SKScene {
             // Aggiungi altre azioni di inizio gioco se necessario
         }
     }
-
+    
 
     
 }
