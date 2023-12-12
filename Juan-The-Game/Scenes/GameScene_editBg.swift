@@ -150,6 +150,7 @@ class GameScene_editBg: SKScene {
         if isGameStarted {
             
 //            addChild(playGameMusic)
+            // buffer bg 
             checkHorsePosition()
             checkHorseVelocity()
             updatePlatformsPositions()
