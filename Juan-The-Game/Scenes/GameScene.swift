@@ -184,9 +184,9 @@ class GameScene: SKScene {
                     xAcceleration = defaultAcceleration
                 }
             if isInverted{
-                horse.run(SKAction.rotate(toAngle: -CGFloat(-xAcceleration/5), duration: 0.15))
+                horse.run(SKAction.rotate(toAngle: -CGFloat(-xAcceleration/5), duration: 0.150))
             }else{
-                horse.run(SKAction.rotate(toAngle: CGFloat(-xAcceleration/5), duration: 0.15))
+                horse.run(SKAction.rotate(toAngle: CGFloat(-xAcceleration/5), duration: 0.150))
             }
             if isGameStarted {
                 if isSuperJumpOn {
