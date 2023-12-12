@@ -24,6 +24,6 @@ enum ZPositions {
     static let scoreLabel: CGFloat = 2
     static let logo: CGFloat = 2
     static let playButton: CGFloat = 2
-    
+    static let ui: CGFloat = 4
     //add
 }
