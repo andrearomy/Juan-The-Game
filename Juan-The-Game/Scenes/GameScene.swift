@@ -125,7 +125,7 @@ class GameScene: SKScene {
         horse.physicsBody = SKPhysicsBody(circleOfRadius: horse.size.width/2)
         horse.physicsBody?.affectedByGravity = true
         horse.physicsBody?.categoryBitMask = PhysicsCategories.horseCategory
-        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory
+        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory | PhysicsCategories.duck2
         horse.physicsBody?.collisionBitMask = PhysicsCategories.none
         addChild(horse)
     }
@@ -297,10 +297,15 @@ class GameScene: SKScene {
         
         platform.removeAllActions()
         platform.alpha = 1.0
-        if Int.random(in: 1...40) == 1 {
+        if Int.random(in: 1...38) == 1 {
             platform.texture = SKTexture(imageNamed: "duck")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.duck
+        }
+        else if Int.random(in: 1...60) == 1 {
+            platform.texture = SKTexture(imageNamed: "duck2")
+            updateSizeOf(platform: platform)
+            platform.physicsBody?.categoryBitMask = PhysicsCategories.duck2
         }
         else if Int.random(in: 1...5) == 1 {
             platform.texture = SKTexture(imageNamed: "pig" + direction)
@@ -452,8 +457,18 @@ extension GameScene: SKPhysicsContactDelegate {
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck {
                     run(SKAction.playSoundFileNamed("superJump", waitForCompletion: false))
+                    horse.physicsBody?.velocity.dy = 8
+                    isSuperJumpOn = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                        self.isSuperJumpOn = false
+                        self.superJumpCounter = 0
+                    }
+                }
+                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck2 {
+                    run(SKAction.playSoundFileNamed("superJump", waitForCompletion: false))
                     horse.physicsBody?.velocity.dy = 10
                     isSuperJumpOn = true
+                    superJumpCounter = -10
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                         self.isSuperJumpOn = false
                         self.superJumpCounter = 0
