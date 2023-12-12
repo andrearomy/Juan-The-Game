@@ -13,6 +13,7 @@ class GameScene: SKScene {
     var platforms = [SKSpriteNode]()
     var bottom = SKShapeNode()
     let scoreLabel = SKLabelNode(text: "Score: 0")
+    let scoreLabelBack = SKLabelNode(text: "Score: 0")
     var score = 0
     var highestScore = 0
     var isGameStarted = false
@@ -21,17 +22,19 @@ class GameScene: SKScene {
     var isSuperJumpOn = false
     var superJumpCounter: CGFloat = 0
     var playGameMusic = SKAudioNode(fileNamed: "gameMusic")
+    var startRainbow = false
     
     var pausePanel: SKSpriteNode?
-
+    
     
     
     enum ZPositions {
         static let background: CGFloat = 0
         static let platform: CGFloat = 1
         static let horse: CGFloat = 2
-        static let scoreLabel: CGFloat = 3
-        static let ui: CGFloat = 4  // Aggiunto per il pulsante di pausa
+        static let scoreLabel: CGFloat = 4
+        static let scoreLabelBack: CGFloat = 3
+        static let ui: CGFloat = 5  // Aggiunto per il pulsante di pausa
         // Aggiungi altri membri se necessario
     }
     
@@ -58,7 +61,7 @@ class GameScene: SKScene {
         pauseButton.zPosition = ZPositions.ui
         pauseButton.name = "Pause"
         addChild(pauseButton)
-
+        
     }
     
     func addBackground() {
@@ -66,7 +69,7 @@ class GameScene: SKScene {
         
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: frame.midX, y: 2120)
-//        background.size = background.texture!.size()
+        //        background.size = background.texture!.size()
         
         background.size = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 5)
         background.zPosition = ZPositions.background
@@ -75,16 +78,16 @@ class GameScene: SKScene {
         
         addChild(background)
     }
-
-
+    
+    
     
     func addScoreCounter() {
-//        for name in UIFont.familyNames {
-//            print(name)
-//            if let nameString = name as? String {
-//                print(UIFont.fontNames(forFamilyName: nameString))
-//            }
-//        }
+        //        for name in UIFont.familyNames {
+        //            print(name)
+        //            if let nameString = name as? String {
+        //                print(UIFont.fontNames(forFamilyName: nameString))
+        //            }
+        //        }
         scoreLabel.fontSize = 30.0
         scoreLabel.fontName = "Minecraftia-Regular"
         scoreLabel.fontColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
@@ -95,6 +98,17 @@ class GameScene: SKScene {
         scoreLabel.position = CGPoint(x: frame.midX, y: frame.height - (view?.safeAreaInsets.top ?? 10) - 20)
         scoreLabel.zPosition = ZPositions.scoreLabel
         addChild(scoreLabel)
+        
+        scoreLabelBack.fontSize = 30.0
+        scoreLabelBack.fontName = "Minecraftia-Regular"
+        scoreLabelBack.fontColor = .black
+        scoreLabelBack.verticalAlignmentMode = .center
+        scoreLabelBack.horizontalAlignmentMode = .center // Set to center
+        
+        // Position scoreLabel at the top center of the screen
+        scoreLabelBack.position = CGPoint(x: frame.midX+3, y: -3+frame.height - (view?.safeAreaInsets.top ?? 10) - 20)
+        scoreLabelBack.zPosition = ZPositions.scoreLabelBack
+        addChild(scoreLabelBack)
     }
     
     
@@ -153,7 +167,7 @@ class GameScene: SKScene {
         checkPhoneTilt()
         if isGameStarted {
             
-//            addChild(playGameMusic)
+            //            addChild(playGameMusic)
             checkHorsePosition()
             checkHorseVelocity()
             updatePlatformsPositions()
@@ -170,6 +184,16 @@ class GameScene: SKScene {
             else if xAcceleration < -defaultAcceleration {
                 xAcceleration = -defaultAcceleration
             }
+            if score > 10000 {
+                xAcceleration = accelerometerData.acceleration.x * 30
+            }
+            else if score > 8000 {
+                xAcceleration = accelerometerData.acceleration.x * 23
+            }else if score > 5000 {
+                xAcceleration = accelerometerData.acceleration.x * 22
+            }else if score > 3000 {
+                xAcceleration = accelerometerData.acceleration.x * 21
+            }
             horse.run(SKAction.rotate(toAngle: CGFloat(-xAcceleration/5), duration: 0.15))
             if isGameStarted {
                 if isSuperJumpOn {
@@ -183,7 +207,7 @@ class GameScene: SKScene {
     func checkHorsePosition() {
         let horseWidth = horse.size.width
         if horse.position.y+horseWidth < 0 {
-//            self.removeAllActions()
+            //            self.removeAllActions()
             playGameMusic.run(SKAction.stop())
             
             run(SKAction.playSoundFileNamed("gameOver", waitForCompletion: false))
@@ -209,8 +233,29 @@ class GameScene: SKScene {
         let oldScore = score
         score = (Int(horse.position.y) - Int(horse.size.height/2)) - (Int(bottom.position.y) - Int(bottom.frame.size.height)/2)
         score = score < 0 ? 0 : score
+        
         if score > oldScore {
-            scoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+            if score > 10000 {
+                if !startRainbow {
+                    let colors: [UIColor] = [.red, .orange, .yellow, .green, .cyan, .purple]
+                    var indexColor = 0
+                    DispatchQueue.global(qos: .background).async {
+                        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { (timer) in
+                            indexColor = indexColor == 6 ? 0 : indexColor
+                            self.scoreLabel.fontColor = colors[indexColor]
+                            indexColor+=1
+                        }
+                        RunLoop.current.run()
+                    }
+                    startRainbow = true
+                }
+            }else if score > 8000 {
+                scoreLabel.fontColor = UIColor.systemRed
+            }else if score > 5000 {
+                scoreLabel.fontColor = UIColor.systemOrange
+            }else if score > 3000 {
+                scoreLabel.fontColor = UIColor.systemYellow
+            }
             if score > highestScore {
                 highestScore = score
             }
@@ -221,6 +266,7 @@ class GameScene: SKScene {
         numberFormatter.locale = Locale(identifier: "en_US")
         let formattedScore = numberFormatter.string(from: NSNumber(value: score))
         scoreLabel.text = "Score: " + (formattedScore ?? "0")
+        scoreLabelBack.text = "Score: " + (formattedScore ?? "0")
     }
     
     func checkHorseVelocity() {
@@ -341,9 +387,9 @@ class GameScene: SKScene {
         pausePanel?.position = CGPoint(x: frame.midX, y: frame.midY)
         pausePanel?.zPosition = ZPositions.ui + 1
         addChild(pausePanel!)
-
+        
         // Add here other items for example mute song
-
+        
         // Resume Button
         let resumeButton = SKSpriteNode(imageNamed: "resumeButton")
         resumeButton.setScale(0.08)
@@ -351,13 +397,13 @@ class GameScene: SKScene {
         resumeButton.name = "Resume"
         pausePanel?.addChild(resumeButton)
     }
-
-
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         guard let touch = touches.first else { return }
         let node = atPoint(touch.location(in: self))
-
+        
         if node.name == "Pause" {
             if isPaused {
                 // Riprendi il gioco se è già in pausa
@@ -385,8 +431,8 @@ class GameScene: SKScene {
             // Aggiungi altre azioni di inizio gioco se necessario
         }
     }
-
-
+    
+    
     
 }
 
