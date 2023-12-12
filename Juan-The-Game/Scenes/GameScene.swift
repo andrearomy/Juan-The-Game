@@ -27,17 +27,6 @@ class GameScene: SKScene {
     var pausePanel: SKSpriteNode?
 
     
-    
-//    enum ZPositions {
-//        static let background: CGFloat = 0
-//        static let platform: CGFloat = 1
-//        static let horse: CGFloat = 2
-//        static let scoreLabel: CGFloat = 3
-//        static let uccello: CGFloat = 5
-//        static let ui: CGFloat = 4  // Aggiunto per il pulsante di pausa
-//        // Aggiungi altri membri se necessario
-//    }
-    
     override func didMove(to view: SKView) {
         motionManager = CMMotionManager()
         motionManager.startAccelerometerUpdates()
@@ -99,12 +88,6 @@ class GameScene: SKScene {
 
     
     func addScoreCounter() {
-//        for name in UIFont.familyNames {
-//            print(name)
-//            if let nameString = name as? String {
-//                print(UIFont.fontNames(forFamilyName: nameString))
-//            }
-//        }
         scoreLabel.fontSize = 30.0
         scoreLabel.fontName = "Minecraftia-Regular"
         scoreLabel.fontColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
@@ -405,19 +388,11 @@ class GameScene: SKScene {
         let node = atPoint(touch.location(in: self))
         
         if node.name == "Pause" {
-            if isPaused {
-                // Riprendi il gioco se è già in pausa
-                isPaused = false
-                playGameMusic.run(SKAction.play())
-                pausePanel?.removeFromParent() // Rimuovi il pannello di pausa
-                // Aggiungi altre azioni di ripresa se necessario
-            } else {
-                // Metti in pausa il gioco se non è in pausa
-                isPaused = true
-                playGameMusic.run(SKAction.pause())
-                createPausePanel() // Crea il pannello di pausa
-                // Aggiungi altre azioni di pausa se necessario
-            }
+            // Metti in pausa il gioco se non è in pausa
+            isPaused = true
+            playGameMusic.run(SKAction.pause())
+            createPausePanel() // Crea il pannello di pausa
+            // Aggiungi altre azioni di pausa se necessario
         } else if node.name == "Resume" {
             // Riprendi il gioco se il pulsante di ripresa è premuto nel pannello di pausa
             isPaused = false
