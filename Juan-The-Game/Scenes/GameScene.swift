@@ -6,6 +6,15 @@
 import SpriteKit
 import CoreMotion
 
+enum gameState {
+    case started
+    case playing
+    case paused
+    case over
+    
+    // controlla nell'update
+}
+
 class GameScene: SKScene {
     
     var motionManager: CMMotionManager!
@@ -22,8 +31,9 @@ class GameScene: SKScene {
     var superJumpCounter: CGFloat = 0
     var playGameMusic = SKAudioNode(fileNamed: "gameMusic")
     var isInverted = false
-
+    var startRainbow = false
     
+    let scoreLabelBack = SKLabelNode(text: "Score: 0")
     var pausePanel: SKSpriteNode?
 
     
@@ -33,13 +43,11 @@ class GameScene: SKScene {
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         layoutScene()
-        
-        isPaused = UserDefaults.standard.bool(forKey: "isPaused")
-        
-        if isPaused {
-            pauseGame()
-            createPausePanel()
-        }
+                
+//        if isPaused {
+//            pauseGame()
+//            createPausePanel()
+//        }
     }
     
     func layoutScene() {
@@ -153,21 +161,38 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        checkPhoneTilt()
+            checkPhoneTilt()
         if isGameStarted {
-            
-//            addChild(playGameMusic)
-            checkHorsePosition()
-            checkHorseVelocity()
-            updatePlatformsPositions()
-        }
+                
+                //            addChild(playGameMusic)
+                checkHorsePosition()
+                checkHorseVelocity()
+                updatePlatformsPositions()
+            }
     }
     
     func checkPhoneTilt() {
         var defaultAcceleration = 9.8
         if let accelerometerData = motionManager.accelerometerData {
             var xAcceleration = accelerometerData.acceleration.x * 20
-            
+            if xAcceleration > defaultAcceleration {
+                            xAcceleration = defaultAcceleration
+                        }
+                        else if xAcceleration < -defaultAcceleration {
+                            xAcceleration = -defaultAcceleration
+                        }
+                        if score > 10000 {
+                            xAcceleration = accelerometerData.acceleration.x * 30
+                        }
+                        else if score > 8000 {
+                            xAcceleration = accelerometerData.acceleration.x * 23
+                        }else if score > 5000 {
+                            xAcceleration = accelerometerData.acceleration.x * 22
+                        }else if score > 3000 {
+                            xAcceleration = accelerometerData.acceleration.x * 21
+                        }
+                        horse.run(SKAction.rotate(toAngle: CGFloat(-xAcceleration/5), duration: 0.15))
+                        
             // Clamping the acceleration within a range
             xAcceleration = min(max(xAcceleration, -defaultAcceleration), defaultAcceleration)
             
@@ -220,7 +245,29 @@ class GameScene: SKScene {
         score = (Int(horse.position.y) - Int(horse.size.height/2)) - (Int(bottom.position.y) - Int(bottom.frame.size.height)/2)
         score = score < 0 ? 0 : score
         if score > oldScore {
-            scoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+            
+            if score > 10000 {
+                if !startRainbow {
+                    let colors: [UIColor] = [.red, .orange, .yellow, .green, .cyan, .purple]
+                    var indexColor = 0
+                    DispatchQueue.global(qos: .background).async {
+                        Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { (timer) in
+                            indexColor = indexColor == 6 ? 0 : indexColor
+                            self.scoreLabel.fontColor = colors[indexColor]
+                            indexColor+=1
+                        }
+                        RunLoop.current.run()
+                    }
+                    startRainbow = true
+                }
+            }else if score > 8000 {
+                scoreLabel.fontColor = UIColor.systemRed
+            }else if score > 5000 {
+                scoreLabel.fontColor = UIColor.systemOrange
+            }else if score > 3000 {
+                scoreLabel.fontColor = UIColor.systemYellow
+            }
+//            scoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
             if score > highestScore {
                 highestScore = score
             }
@@ -231,6 +278,8 @@ class GameScene: SKScene {
         numberFormatter.locale = Locale(identifier: "en_US")
         let formattedScore = numberFormatter.string(from: NSNumber(value: score))
         scoreLabel.text = "Score: " + (formattedScore ?? "0")
+        
+        scoreLabelBack.text = "Score: " + (formattedScore ?? "0")
     }
     
     func checkHorseVelocity() {
@@ -364,10 +413,10 @@ class GameScene: SKScene {
         }
     }
     
-    func pauseGame() {
-        isPaused = true
-        playGameMusic.run(SKAction.pause())
-    }
+//    func fpauseGame() {
+//        isPaused = true
+//        playGameMusic.run(SKAction.pause())
+//    }
     
     func createPausePanel() {
         // Panel
@@ -394,6 +443,7 @@ class GameScene: SKScene {
         
         if node.name == "Pause" {
             // Metti in pausa il gioco se non è in pausa
+            UserDefaults.standard.setValue(true, forKey: "isPaused")
             isPaused = true
             playGameMusic.run(SKAction.pause())
             createPausePanel() // Crea il pannello di pausa
