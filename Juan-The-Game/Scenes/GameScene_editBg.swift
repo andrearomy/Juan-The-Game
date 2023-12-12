@@ -101,7 +101,7 @@ class GameScene_editBg: SKScene {
         horse.physicsBody = SKPhysicsBody(circleOfRadius: horse.size.width/2)
         horse.physicsBody?.affectedByGravity = true
         horse.physicsBody?.categoryBitMask = PhysicsCategories.horseCategory
-        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.dollarWithHoleCategory | PhysicsCategories.duck
+        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck
         horse.physicsBody?.collisionBitMask = PhysicsCategories.none
         addChild(horse)
     }
@@ -289,7 +289,7 @@ class GameScene_editBg: SKScene {
         else if Int.random(in: 1...5) == 1 {
             platform.texture = SKTexture(imageNamed: "dollarWithHole" + direction)
             updateSizeOf(platform: platform)
-            platform.physicsBody?.categoryBitMask = PhysicsCategories.dollarWithHoleCategory
+            platform.physicsBody?.categoryBitMask = PhysicsCategories.cloudCategory
         }
         else {
             platform.texture = SKTexture(imageNamed: "platform" + direction)
@@ -398,7 +398,7 @@ extension GameScene_editBg: SKPhysicsContactDelegate {
                     run(playJumpSound)
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
                 }
-                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.dollarWithHoleCategory {
+                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.cloudCategory {
                     run(playJumpSound)
                     run(playBreakSound)
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y

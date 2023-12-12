@@ -108,7 +108,7 @@ class GameScene: SKScene {
         horse.physicsBody = SKPhysicsBody(circleOfRadius: horse.size.width/2)
         horse.physicsBody?.affectedByGravity = true
         horse.physicsBody?.categoryBitMask = PhysicsCategories.horseCategory
-        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.dollarWithHoleCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory
+        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory
         horse.physicsBody?.collisionBitMask = PhysicsCategories.none
         addChild(horse)
     }
@@ -281,13 +281,13 @@ class GameScene: SKScene {
         
         platform.removeAllActions()
         platform.alpha = 1.0
-        if Int.random(in: 1...35) == 1 {
+        if Int.random(in: 1...40) == 1 {
             platform.texture = SKTexture(imageNamed: "duck")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.duck
         }
         else if Int.random(in: 1...5) == 1 {
-            platform.texture = SKTexture(imageNamed: "cloud" + direction)
+            platform.texture = SKTexture(imageNamed: "pig" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
             if direction == "Left" {
@@ -299,7 +299,7 @@ class GameScene: SKScene {
                 animate(platform: platform, isLeft: false)
             }
         }
-        else if Int.random(in: 1...5) == 1 {
+        else if Int.random(in: 1...30) == 1 {
                 platform.texture = SKTexture(imageNamed: "platformBird" + direction)
                 updateSizeOf(platform: platform)
                 platform.physicsBody?.categoryBitMask = PhysicsCategories.birdCategory
@@ -313,9 +313,9 @@ class GameScene: SKScene {
             }
             }
         else if Int.random(in: 1...5) == 1 {
-            platform.texture = SKTexture(imageNamed: "dollarWithHole" + direction)
+            platform.texture = SKTexture(imageNamed: "cloud" + direction)
             updateSizeOf(platform: platform)
-            platform.physicsBody?.categoryBitMask = PhysicsCategories.dollarWithHoleCategory
+            platform.physicsBody?.categoryBitMask = PhysicsCategories.cloudCategory
         }
         else {
             platform.texture = SKTexture(imageNamed: "platform" + direction)
@@ -425,7 +425,7 @@ extension GameScene: SKPhysicsContactDelegate {
                     run(playJumpSound)
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
                 }
-                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.dollarWithHoleCategory {
+                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.cloudCategory {
                     run(playJumpSound)
                     run(playBreakSound)
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
@@ -445,7 +445,6 @@ extension GameScene: SKPhysicsContactDelegate {
                 }
                 else if contactMask == PhysicsCategories.birdCategory | PhysicsCategories.horseCategory{
                     isInverted = true
-                    print("procodio")
                     run(playJumpSound)
                     run(playBreakSound)
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
@@ -453,7 +452,7 @@ extension GameScene: SKPhysicsContactDelegate {
                         platform.physicsBody?.categoryBitMask = PhysicsCategories.none
                         platform.run(SKAction.fadeOut(withDuration: 0.5))
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         self.isInverted = false
                     }
                 }
