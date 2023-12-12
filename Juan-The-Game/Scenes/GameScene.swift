@@ -177,29 +177,28 @@ class GameScene: SKScene {
         var defaultAcceleration = 9.8
         if let accelerometerData = motionManager.accelerometerData {
             var xAcceleration = accelerometerData.acceleration.x * 20
-                if xAcceleration > defaultAcceleration {
-                    xAcceleration = -defaultAcceleration
-                }
-                else if xAcceleration < -defaultAcceleration {
-                    xAcceleration = defaultAcceleration
-                }
-            if isInverted{
-                horse.run(SKAction.rotate(toAngle: -CGFloat(-xAcceleration/5), duration: 0.150))
-            }else{
-                horse.run(SKAction.rotate(toAngle: CGFloat(-xAcceleration/5), duration: 0.150))
-            }
+            
+            // Clamping the acceleration within a range
+            xAcceleration = min(max(xAcceleration, -defaultAcceleration), defaultAcceleration)
+            
             if isGameStarted {
                 if isSuperJumpOn {
                     defaultAcceleration = -0.1
                 }
-                if isInverted{
+                
+                let targetRotation = CGFloat(-xAcceleration / 5)
+                let rotateAction = SKAction.rotate(toAngle: targetRotation, duration: 0.15, shortestUnitArc: true)
+                horse.run(rotateAction)
+                
+                if isInverted {
                     physicsWorld.gravity = CGVector(dx: -xAcceleration, dy: -defaultAcceleration)
-                }else{
+                } else {
                     physicsWorld.gravity = CGVector(dx: xAcceleration, dy: -defaultAcceleration)
                 }
             }
         }
     }
+
     
     func checkHorsePosition() {
         let horseWidth = horse.size.width
