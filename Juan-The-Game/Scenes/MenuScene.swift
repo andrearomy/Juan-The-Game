@@ -10,10 +10,11 @@ import SpriteKit
 class MenuScene: SKScene {
     
     let logo = SKSpriteNode(imageNamed: "logo")
-    
+    let juan = SKSpriteNode(imageNamed: "juan")
     
     override func didMove(to view: SKView) {
         addBackground()
+        addText()
         addLogo()
         addLastScore()
         addHighScore()
@@ -35,9 +36,20 @@ class MenuScene: SKScene {
         
         logo.setScale(0.7)
         
-        logo.position = CGPoint(x: frame.midX - 20, y: topPosition - (logo.size.height/5) - 300 )
+        logo.position = CGPoint(x: frame.midX - 20, y: topPosition - (logo.size.height/5) - 250 )
         logo.zPosition = ZPositions.logo
         addChild(logo)
+    }
+    
+    func addText(){
+        let topPosition = frame.height - (view?.safeAreaInsets.top ?? 10)
+        
+        juan.setScale(0.3)
+        
+        juan.position = CGPoint(x: frame.midX + 90, y: topPosition - (logo.size.height/5) - 470 )
+        juan.zPosition = ZPositions.logo
+        addChild(juan)
+        
     }
     
     func addLastScore() {
