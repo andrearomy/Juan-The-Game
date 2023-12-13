@@ -16,6 +16,7 @@ enum PhysicsCategories {
     static let duck2: UInt32 = 0x1 << 6
     static let duck3: UInt32 = 0x1 << 7
     static let birdCategory: UInt32 = 0x1 << 5
+    static let frogCategory: UInt32 = 0x1 << 8
     
 }
 

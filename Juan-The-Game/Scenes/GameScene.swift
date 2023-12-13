@@ -35,7 +35,7 @@ class GameScene: SKScene {
     
     let scoreLabelBack = SKLabelNode(text: "Score: 0")
     var pausePanel: SKSpriteNode?
-
+    
     
     override func didMove(to view: SKView) {
         motionManager = CMMotionManager()
@@ -43,11 +43,11 @@ class GameScene: SKScene {
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         layoutScene()
-                
-//        if isPaused {
-//            pauseGame()
-//            createPausePanel()
-//        }
+        
+        //        if isPaused {
+        //            pauseGame()
+        //            createPausePanel()
+        //        }
     }
     
     func layoutScene() {
@@ -65,7 +65,7 @@ class GameScene: SKScene {
         pauseButton.zPosition = ZPositions.ui
         pauseButton.name = "Pause"
         addChild(pauseButton)
-
+        
     }
     
     func addBackground() {
@@ -92,8 +92,8 @@ class GameScene: SKScene {
         
         addChild(background)
     }
-
-
+    
+    
     
     func addScoreCounter() {
         scoreLabel.fontSize = 30.0
@@ -116,7 +116,7 @@ class GameScene: SKScene {
         horse.physicsBody = SKPhysicsBody(circleOfRadius: horse.size.width/2)
         horse.physicsBody?.affectedByGravity = true
         horse.physicsBody?.categoryBitMask = PhysicsCategories.horseCategory
-        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory | PhysicsCategories.duck2 | PhysicsCategories.duck3
+        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory | PhysicsCategories.duck2 | PhysicsCategories.duck3 | PhysicsCategories.frogCategory
         horse.physicsBody?.collisionBitMask = PhysicsCategories.none
         addChild(horse)
     }
@@ -124,7 +124,7 @@ class GameScene: SKScene {
     func addBottom() {
         bottom = SKShapeNode(rectOf: CGSize(width: frame.width*2, height: 20))
         bottom.position = CGPoint(x: frame.midX, y: 10)
-        bottom.fillColor = UIColor.init(red: 25/255, green: 105/255, blue: 81/255, alpha: 1)
+        bottom.fillColor = UIColor.init(red: 79/255, green: 39/255, blue: 37/255, alpha: 1)
         bottom.strokeColor = bottom.fillColor
         bottom.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: frame.width, height: 20))
         bottom.physicsBody?.affectedByGravity = false
@@ -161,14 +161,14 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-            checkPhoneTilt()
+        checkPhoneTilt()
         if isGameStarted {
-                
-                //            addChild(playGameMusic)
-                checkHorsePosition()
-                checkHorseVelocity()
-                updatePlatformsPositions()
-            }
+            
+            //            addChild(playGameMusic)
+            checkHorsePosition()
+            checkHorseVelocity()
+            updatePlatformsPositions()
+        }
     }
     
     func checkPhoneTilt() {
@@ -176,23 +176,23 @@ class GameScene: SKScene {
         if let accelerometerData = motionManager.accelerometerData {
             var xAcceleration = accelerometerData.acceleration.x * 20
             if xAcceleration > defaultAcceleration {
-                            xAcceleration = defaultAcceleration
-                        }
-                        else if xAcceleration < -defaultAcceleration {
-                            xAcceleration = -defaultAcceleration
-                        }
-                        if score > 10000 {
-                            xAcceleration = accelerometerData.acceleration.x * 30
-                        }
-                        else if score > 8000 {
-                            xAcceleration = accelerometerData.acceleration.x * 23
-                        }else if score > 5000 {
-                            xAcceleration = accelerometerData.acceleration.x * 22
-                        }else if score > 3000 {
-                            xAcceleration = accelerometerData.acceleration.x * 21
-                        }
-                        horse.run(SKAction.rotate(toAngle: CGFloat(-xAcceleration/5), duration: 0.15))
-                        
+                xAcceleration = defaultAcceleration
+            }
+            else if xAcceleration < -defaultAcceleration {
+                xAcceleration = -defaultAcceleration
+            }
+            if score > 10000 {
+                xAcceleration = accelerometerData.acceleration.x * 30
+            }
+            else if score > 8000 {
+                xAcceleration = accelerometerData.acceleration.x * 23
+            }else if score > 5000 {
+                xAcceleration = accelerometerData.acceleration.x * 22
+            }else if score > 3000 {
+                xAcceleration = accelerometerData.acceleration.x * 21
+            }
+            horse.run(SKAction.rotate(toAngle: CGFloat(-xAcceleration/5), duration: 0.15))
+            
             // Clamping the acceleration within a range
             xAcceleration = min(max(xAcceleration, -defaultAcceleration), defaultAcceleration)
             
@@ -213,12 +213,12 @@ class GameScene: SKScene {
             }
         }
     }
-
+    
     
     func checkHorsePosition() {
         let horseWidth = horse.size.width
         if horse.position.y+horseWidth < 0 {
-//            self.removeAllActions()
+            //            self.removeAllActions()
             playGameMusic.run(SKAction.stop())
             
             run(SKAction.playSoundFileNamed("gameOver", waitForCompletion: false))
@@ -267,7 +267,7 @@ class GameScene: SKScene {
             }else if score > 3000 {
                 scoreLabel.fontColor = UIColor.systemYellow
             }
-//            scoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
+            //            scoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
             if score > highestScore {
                 highestScore = score
             }
@@ -339,12 +339,12 @@ class GameScene: SKScene {
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.duck2
         }
-        else if Int.random(in: 1...100) == 1 {
+        else if Int.random(in: 1...80) == 1 {
             platform.texture = SKTexture(imageNamed: "duck3")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.duck3
         }
-        else if Int.random(in: 1...6) == 1 {
+        else if Int.random(in: 1...7) == 1 {
             platform.texture = SKTexture(imageNamed: "pig" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
@@ -357,10 +357,10 @@ class GameScene: SKScene {
                 animate(platform: platform, isLeft: false)
             }
         }
-        else if Int.random(in: 1...20) == 1 {
-                platform.texture = SKTexture(imageNamed: "platformBird" + direction)
-                updateSizeOf(platform: platform)
-                platform.physicsBody?.categoryBitMask = PhysicsCategories.birdCategory
+        else if Int.random(in: 1...28) == 1 {
+            platform.texture = SKTexture(imageNamed: "platformBird" + direction)
+            updateSizeOf(platform: platform)
+            platform.physicsBody?.categoryBitMask = PhysicsCategories.birdCategory
             if direction == "Left" {
                 platform.position.x = 0
                 animate(platform: platform, isLeft: true)
@@ -369,8 +369,13 @@ class GameScene: SKScene {
                 platform.position.x = frame.size.width
                 animate(platform: platform, isLeft: false)
             }
-            }
-        else if Int.random(in: 1...5) == 1 {
+        }
+        else if Int.random(in: 1...55) == 1 {
+            platform.texture = SKTexture(imageNamed: "platformFrog")
+            updateSizeOf(platform: platform)
+            platform.physicsBody?.categoryBitMask = PhysicsCategories.frogCategory
+        }
+        else if Int.random(in: 1...7) == 1 {
             platform.texture = SKTexture(imageNamed: "cloud" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.cloudCategory
@@ -413,10 +418,10 @@ class GameScene: SKScene {
         }
     }
     
-//    func fpauseGame() {
-//        isPaused = true
-//        playGameMusic.run(SKAction.pause())
-//    }
+    //    func fpauseGame() {
+    //        isPaused = true
+    //        playGameMusic.run(SKAction.pause())
+    //    }
     
     func createPausePanel() {
         // Panel
@@ -424,9 +429,9 @@ class GameScene: SKScene {
         pausePanel?.position = CGPoint(x: frame.midX, y: frame.midY)
         pausePanel?.zPosition = ZPositions.ui + 1
         addChild(pausePanel!)
-
+        
         // Add here other items for example mute song
-
+        
         // Resume Button
         let resumeButton = SKSpriteNode(imageNamed: "resumeButton")
         resumeButton.setScale(0.08)
@@ -434,8 +439,8 @@ class GameScene: SKScene {
         resumeButton.name = "Resume"
         pausePanel?.addChild(resumeButton)
     }
-
-
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         guard let touch = touches.first else { return }
@@ -461,9 +466,6 @@ class GameScene: SKScene {
             // Aggiungi altre azioni di inizio gioco se necessario
         }
     }
-    
-
-    
 }
 
 extension GameScene: SKPhysicsContactDelegate {
@@ -512,6 +514,25 @@ extension GameScene: SKPhysicsContactDelegate {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                         self.isSuperJumpOn = false
                         self.superJumpCounter = 0
+                    }
+                }
+                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.frogCategory {
+                    run(playJumpSound)
+                    run(playBreakSound)
+                    horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
+                    if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
+                        platform.physicsBody?.categoryBitMask = PhysicsCategories.none
+                        platform.run(SKAction.fadeOut(withDuration: 0.5))
+                    }
+                    if let horse = (contact.bodyA.node as? SKSpriteNode)?.name == "Juan" ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
+                        let shrinkAction = SKAction.scale(by: 0.5, duration: 0.5)
+                        let revertAction = SKAction.scale(to: 1.0, duration: 0.5)
+                        
+                        // Sequence the actions: Shrink -> Wait for 5 seconds -> Revert
+                        let sequenceAction = SKAction.sequence([shrinkAction, SKAction.wait(forDuration: 5.0), revertAction])
+                        
+                        // Run the sequence action on the horse
+                        horse.run(sequenceAction)
                     }
                 }
                 else if contactMask == PhysicsCategories.birdCategory | PhysicsCategories.horseCategory{
