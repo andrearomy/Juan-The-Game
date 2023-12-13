@@ -60,7 +60,7 @@ class GameScene: SKScene {
         
         // Pause button
         let pauseButton = SKSpriteNode(imageNamed: "pauseButton")
-        pauseButton.setScale(0.03)
+        pauseButton.setScale(0.2)
         pauseButton.position = CGPoint(x: frame.width - 45, y: frame.height - 65)
         pauseButton.zPosition = ZPositions.ui
         pauseButton.name = "Pause"
@@ -429,10 +429,23 @@ class GameScene: SKScene {
 
         // Resume Button
         let resumeButton = SKSpriteNode(imageNamed: "resumeButton")
-        resumeButton.setScale(0.08)
+        resumeButton.setScale(0.4)
         resumeButton.zPosition = ZPositions.ui + 2
         resumeButton.name = "Resume"
         pausePanel?.addChild(resumeButton)
+        
+        // Exit Button
+        let exitButton = SKSpriteNode(imageNamed: "exitButton")
+        exitButton.setScale(0.4)
+        exitButton.zPosition = ZPositions.ui + 2
+        exitButton.name = "Exit"
+        pausePanel?.addChild(exitButton)
+        
+        // Set positions
+        let buttonSeparation: CGFloat = 50.0 // Adjust this value based on your preference
+        let totalHeight = resumeButton.size.height + buttonSeparation + exitButton.size.height
+        resumeButton.position = CGPoint(x: 0, y: totalHeight / 4)
+        exitButton.position = CGPoint(x: 0, y: -totalHeight / 4)
     }
 
 
@@ -449,11 +462,14 @@ class GameScene: SKScene {
             createPausePanel() // Crea il pannello di pausa
             // Aggiungi altre azioni di pausa se necessario
         } else if node.name == "Resume" {
-            // Riprendi il gioco se il pulsante di ripresa è premuto nel pannello di pausa
+            
             isPaused = false
             playGameMusic.run(SKAction.play())
             pausePanel?.removeFromParent() // Rimuovi il pannello di pausa
-            // Aggiungi altre azioni di ripresa se necessario
+            
+        } else if node.name == "Exit"{
+            let menuScene = MenuScene.init(size: view!.bounds.size)
+            view?.presentScene(menuScene)
         } else if !isGameStarted {
             horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
             isGameStarted = true
