@@ -26,6 +26,10 @@ class GameScene: SKScene {
     var highestScore = 0
     var isGameStarted = false
     let playJumpSound = SKAction.playSoundFileNamed("jump", waitForCompletion: false)
+    let playFrogSound = SKAction.playSoundFileNamed("frog", waitForCompletion: false)
+    let playPigSound = SKAction.playSoundFileNamed("pig", waitForCompletion: false)
+    let playDuckSound = SKAction.playSoundFileNamed("duck", waitForCompletion: false)
+    let playBirdSound = SKAction.playSoundFileNamed("bird", waitForCompletion: false)
     let playBreakSound = SKAction.playSoundFileNamed("break", waitForCompletion: false)
     var isSuperJumpOn = false
     var superJumpCounter: CGFloat = 0
@@ -34,8 +38,11 @@ class GameScene: SKScene {
     var startRainbow = false
     var yellowBorder = false
     
+    
     let scoreLabelBack = SKLabelNode(text: "Score: 0")
     var pausePanel: SKSpriteNode?
+    
+
     
     
     override func didMove(to view: SKView) {
@@ -52,12 +59,13 @@ class GameScene: SKScene {
     }
     
     func layoutScene() {
-        addChild(playGameMusic)
+        playGameMusic.run(SKAction.changeVolume(to: 0.3, duration: 1))
         addBackground()
         addScoreCounter()
         spawnHorse()
         addBottom()
         makePlatforms()
+        addChild(playGameMusic)
         
         // Pause button
         let pauseButton = SKSpriteNode(imageNamed: "pauseButton")
@@ -118,7 +126,7 @@ class GameScene: SKScene {
         horse.physicsBody = SKPhysicsBody(circleOfRadius: horse.size.width/2)
         horse.physicsBody?.affectedByGravity = true
         horse.physicsBody?.categoryBitMask = PhysicsCategories.horseCategory
-        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory | PhysicsCategories.duck2 | PhysicsCategories.duck3 | PhysicsCategories.frogCategory
+        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory | PhysicsCategories.duck2 | PhysicsCategories.duck3 | PhysicsCategories.frogCategory | PhysicsCategories.pigCategory
         horse.physicsBody?.collisionBitMask = PhysicsCategories.none
         addChild(horse)
     }
@@ -426,7 +434,7 @@ class GameScene: SKScene {
         else if Int.random(in: 1...7) == 1 {
             platform.texture = SKTexture(imageNamed: "pig" + direction)
             updateSizeOf(platform: platform)
-            platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
+            platform.physicsBody?.categoryBitMask = PhysicsCategories.pigCategory
             if direction == "Left" {
                 platform.position.x = 0
                 animate(platform: platform, isLeft: true)
@@ -436,7 +444,7 @@ class GameScene: SKScene {
                 animate(platform: platform, isLeft: false)
             }
         }
-        else if Int.random(in: 1...5) == 1 {
+        else if Int.random(in: 1...35) == 1 {
             platform.texture = SKTexture(imageNamed: "platformBird" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.birdCategory
@@ -574,6 +582,11 @@ extension GameScene: SKPhysicsContactDelegate {
                     run(playJumpSound)
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
                 }
+                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.pigCategory {
+                    run(playPigSound)
+                    run(playJumpSound)
+                    horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
+                }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.cloudCategory {
                     run(playJumpSound)
                     run(playBreakSound)
@@ -585,6 +598,7 @@ extension GameScene: SKPhysicsContactDelegate {
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck {
                     run(SKAction.playSoundFileNamed("superJump", waitForCompletion: false))
+                    run(playDuckSound)
                     horse.physicsBody?.velocity.dy = 8
                     isSuperJumpOn = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
@@ -594,6 +608,7 @@ extension GameScene: SKPhysicsContactDelegate {
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck2 {
                     run(SKAction.playSoundFileNamed("superJump", waitForCompletion: false))
+                    run(playDuckSound)
                     horse.physicsBody?.velocity.dy = 10
                     isSuperJumpOn = true
                     superJumpCounter = -10
@@ -604,6 +619,7 @@ extension GameScene: SKPhysicsContactDelegate {
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck3 {
                     run(SKAction.playSoundFileNamed("superJump", waitForCompletion: false))
+                    run(playDuckSound)
                     horse.physicsBody?.velocity.dy = 10
                     isSuperJumpOn = true
                     superJumpCounter = -25
@@ -614,6 +630,7 @@ extension GameScene: SKPhysicsContactDelegate {
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.frogCategory {
                     run(playJumpSound)
+                    run(playFrogSound)
                     run(playBreakSound)
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
                     if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
@@ -633,6 +650,7 @@ extension GameScene: SKPhysicsContactDelegate {
                 }
                 else if contactMask == PhysicsCategories.birdCategory | PhysicsCategories.horseCategory{
                     isInverted = true
+                    run(playBirdSound)
                     run(playJumpSound)
                     run(playBreakSound)
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
