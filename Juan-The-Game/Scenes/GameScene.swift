@@ -96,8 +96,9 @@ class GameScene: SKScene {
     
     
     func addScoreCounter() {
-        scoreLabel.fontSize = 30.0
-        scoreLabel.fontName = "Minecraftia-Regular"
+        
+        scoreLabel.fontSize = 25
+        scoreLabel.fontName = "PixelFJ8pt1Normal"
         scoreLabel.fontColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         scoreLabel.verticalAlignmentMode = .center
         scoreLabel.horizontalAlignmentMode = .center // Set to center

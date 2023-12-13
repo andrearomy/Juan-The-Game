@@ -41,14 +41,20 @@ class MenuScene: SKScene {
     }
     
     func addLastScore() {
+        for name in UIFont.familyNames {
+            print(name)
+            if let nameString = name as? String {
+                print(UIFont.fontNames(forFamilyName: nameString))
+            }
+        }
         let topPosition = frame.height - (view?.safeAreaInsets.top ?? 10)
         
         let lastScore = UserDefaults.standard.integer(forKey: "LastScore")
         let formattedScore = formatScore(from: lastScore)
         
         let lastScoreLabel = SKLabelNode(text: "Last Score: " + (formattedScore ?? "0"))
-        lastScoreLabel.fontSize = 18.0
-        lastScoreLabel.fontName = "Minecraftia-Regular"
+        lastScoreLabel.fontSize = 15
+        lastScoreLabel.fontName = "PixelFJ8pt1Normal"
         lastScoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         lastScoreLabel.position = CGPoint(x: frame.midX, y: topPosition - (logo.size.height/8) - 15)
 //        lastScoreLabel.position = CGPoint(x: frame.midX, y: logo.position.y - logo.size.height/2 - 20)
@@ -73,8 +79,8 @@ class MenuScene: SKScene {
         let formattedScore = formatScore(from: highScore)
         
         let highScoreLabel = SKLabelNode(text: "Highest Score: " + (formattedScore ?? "0"))
-        highScoreLabel.fontSize = 24.0
-        highScoreLabel.fontName = "Minecraftia-Regular"
+        highScoreLabel.fontSize = 25
+        highScoreLabel.fontName = "PixelFJ8pt1Normal"
         highScoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         highScoreLabel.position = CGPoint(x: frame.midX, y: topPosition - (logo.size.height/8) - 55)
 //        highScoreLabel.position = CGPoint(x: frame.midX, y: logo.position.y - logo.size.height/2 - 52)
