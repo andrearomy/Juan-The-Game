@@ -538,12 +538,12 @@ class GameScene: SKScene {
         let node = atPoint(touch.location(in: self))
         
         if node.name == "Pause" {
-            // Metti in pausa il gioco se non è in pausa
+            
             UserDefaults.standard.setValue(true, forKey: "isPaused")
             isPaused = true
             playGameMusic.run(SKAction.pause())
             createPausePanel() // Crea il pannello di pausa
-            // Aggiungi altre azioni di pausa se necessario
+            
         } else if node.name == "Resume" {
             
             isPaused = false
@@ -553,11 +553,12 @@ class GameScene: SKScene {
         } else if node.name == "Exit"{
             let menuScene = MenuScene.init(size: view!.bounds.size)
             view?.presentScene(menuScene)
+            
         } else if !isGameStarted {
             horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
             isGameStarted = true
             run(playJumpSound)
-            // Aggiungi altre azioni di inizio gioco se necessario
+            
         }
     }
 }
