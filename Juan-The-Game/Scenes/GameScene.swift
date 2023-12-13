@@ -32,6 +32,7 @@ class GameScene: SKScene {
     var playGameMusic = SKAudioNode(fileNamed: "gameMusic")
     var isInverted = false
     var startRainbow = false
+    var yellowBorder = false
     
     let scoreLabelBack = SKLabelNode(text: "Score: 0")
     var pausePanel: SKSpriteNode?
@@ -96,8 +97,9 @@ class GameScene: SKScene {
     
     
     func addScoreCounter() {
-        scoreLabel.fontSize = 30.0
-        scoreLabel.fontName = "Minecraftia-Regular"
+        
+        scoreLabel.fontSize = 25
+        scoreLabel.fontName = "PixelFJ8pt1Normal"
         scoreLabel.fontColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         scoreLabel.verticalAlignmentMode = .center
         scoreLabel.horizontalAlignmentMode = .center // Set to center
@@ -168,6 +170,83 @@ class GameScene: SKScene {
             checkHorsePosition()
             checkHorseVelocity()
             updatePlatformsPositions()
+            checkYellowBorder()
+        }
+    }
+    
+    func checkYellowBorder() {
+        if isInverted {
+            if !yellowBorder{
+                /*
+                 let borderRect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+                 let borderPath = UIBezierPath(rect: borderRect)
+                 
+                 let border = SKShapeNode(path: borderPath.cgPath)
+                 border.position = CGPoint(x: 0, y: 0)
+                 border.strokeColor = .yellow
+                 border.lineWidth = 20
+                 border.zPosition = ZPositions.border
+                 border.name = "border"
+                 */
+                
+                /*
+                 let side1 = SKShapeNode()
+                 side1.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height), cornerRadius: 60).cgPath
+                 side1.position = CGPoint(x: 0, y: 0)
+                 side1.strokeColor = UIColor.yellow
+                 side1.lineWidth = 30
+                 */
+                
+                let path1  = CGPath.init(rect: CGRect.init(x: 0, y: frame.maxY, width: frame.size.width, height: frame.size.height), transform: nil)
+                
+                let path2 = CGPath.init(rect: CGRect.init(x: frame.maxX, y: frame.maxY, width: frame.size.width, height: frame.size.height), transform: nil)
+                
+                let path3 = CGPath.init(rect: CGRect.init(x: frame.maxX, y: 0, width: frame.size.width, height: frame.size.height), transform: nil)
+                
+                let path4 = CGPath.init(rect: CGRect.init(x: 0, y: 0, width: frame.size.width, height: frame.size.height), transform: nil)
+                
+                
+                let shapeLayer = CAShapeLayer()
+                self.view?.layer.addSublayer(shapeLayer)
+                shapeLayer.fillColor = UIColor.clear.cgColor
+                shapeLayer.path = path1
+                
+                let anim1 = CABasicAnimation.init(keyPath: "path")
+                anim1.duration = 1.0
+                anim1.fromValue  = path1
+                anim1.toValue = path2
+                anim1.isRemovedOnCompletion  = true
+                
+                let side1 = SKShapeNode.init(path: path1)
+                side1.strokeColor = UIColor.yellow
+                side1.lineWidth = 100
+                
+                let side2 = SKShapeNode.init(path: path2)
+                side1.strokeColor = UIColor.yellow
+                side1.lineWidth = 100
+                
+                let side3 = SKShapeNode.init(path: path3)
+                side1.strokeColor = UIColor.yellow
+                side1.lineWidth = 100
+                
+                let side4 = SKShapeNode.init(path: path4)
+                side1.strokeColor = UIColor.yellow
+                side1.lineWidth = 100
+                
+                addChild(side1)
+                addChild(side2)
+                addChild(side3)
+                addChild(side4)
+                
+                shapeLayer.add(anim1, forKey:
+                                "ani1")
+                side1.run(SKAction.customAction(withDuration: anim1.duration, actionBlock: { (node, timeDuration) in
+                    (node as! SKShapeNode).path = shapeLayer.presentation()?.path
+                    }
+                                               )
+                )
+                yellowBorder = true
+            }
         }
     }
     
@@ -329,7 +408,7 @@ class GameScene: SKScene {
         
         platform.removeAllActions()
         platform.alpha = 1.0
-        if Int.random(in: 1...35) == 1 {
+        if Int.random(in: 1...60) == 1 {
             platform.texture = SKTexture(imageNamed: "duck")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.duck
@@ -357,7 +436,7 @@ class GameScene: SKScene {
                 animate(platform: platform, isLeft: false)
             }
         }
-        else if Int.random(in: 1...28) == 1 {
+        else if Int.random(in: 1...5) == 1 {
             platform.texture = SKTexture(imageNamed: "platformBird" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.birdCategory
@@ -563,6 +642,7 @@ extension GameScene: SKPhysicsContactDelegate {
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         self.isInverted = false
+                        self.yellowBorder = false
                     }
                 }
             }
