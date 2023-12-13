@@ -34,9 +34,9 @@ class MenuScene: SKScene {
     func addLogo() {
         let topPosition = frame.height - (view?.safeAreaInsets.top ?? 10)
         
-        logo.setScale(0.7)
+        logo.setScale(0.67)
         
-        logo.position = CGPoint(x: frame.midX - 20, y: topPosition - (logo.size.height/5) - 250 )
+        logo.position = CGPoint(x: frame.midX - 30, y: topPosition - (logo.size.height/5) - 250 )
         logo.zPosition = ZPositions.logo
         addChild(logo)
     }
@@ -46,19 +46,19 @@ class MenuScene: SKScene {
         
         juan.setScale(0.3)
         
-        juan.position = CGPoint(x: frame.midX + 90, y: topPosition - (logo.size.height/5) - 470 )
+        juan.position = CGPoint(x: frame.midX + 90, y: topPosition - (logo.size.height/5) - 460 )
         juan.zPosition = ZPositions.logo
         addChild(juan)
         
     }
     
     func addLastScore() {
-        for name in UIFont.familyNames {
-            print(name)
-            if let nameString = name as? String {
-                print(UIFont.fontNames(forFamilyName: nameString))
-            }
-        }
+//        for name in UIFont.familyNames {
+//            print(name)
+//            if let nameString = name as? String {
+//                print(UIFont.fontNames(forFamilyName: nameString))
+//            }
+//        }
         let topPosition = frame.height - (view?.safeAreaInsets.top ?? 10)
         
         let lastScore = UserDefaults.standard.integer(forKey: "LastScore")
