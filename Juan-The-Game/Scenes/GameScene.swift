@@ -52,6 +52,7 @@ class GameScene: SKScene {
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         layoutScene()
         
+        
         //        if isPaused {
         //            pauseGame()
         //            createPausePanel()
@@ -510,6 +511,16 @@ class GameScene: SKScene {
     //        playGameMusic.run(SKAction.pause())
     //    }
     
+    let muteButton = SKSpriteNode(imageNamed: "muteButton")
+    let unmuteButton = SKSpriteNode(imageNamed: "unmuteButton")
+
+    var isMusicMuted: Bool = false
+    
+    
+//    var muteButton: SKSpriteNode!
+//    var unmuteButton: SKSpriteNode!
+
+    
     func createPausePanel() {
         // Panel
         pausePanel = SKSpriteNode(color: UIColor.black.withAlphaComponent(0.7), size: CGSize(width: frame.width, height: frame.height))
@@ -533,11 +544,37 @@ class GameScene: SKScene {
         exitButton.name = "Exit"
         pausePanel?.addChild(exitButton)
         
+        // Mute Button
+//        let muteButton = SKSpriteNode(imageNamed: "muteButton")
+        muteButton.setScale(0.4)
+        muteButton.zPosition = ZPositions.ui + 2
+        muteButton.name = "Mute"
+        pausePanel?.addChild(muteButton)
+        
+        // Unmute Button
+//        let unmuteButton = SKSpriteNode(imageNamed: "unmuteButton")
+        unmuteButton.setScale(0.4)
+        unmuteButton.zPosition = ZPositions.ui + 2
+        unmuteButton.name = "Unmute"
+        pausePanel?.addChild(unmuteButton)
+        
+//        // Set initial button visibility based on mute state
+//        muteButton.isHidden = false
+//        unmuteButton.isHidden = true
+        
+        
+        muteButton.isHidden = isMusicMuted
+        unmuteButton.isHidden = !isMusicMuted
+        
         // Set positions
         let buttonSeparation: CGFloat = 50.0 // Adjust this value based on your preference
-        let totalHeight = resumeButton.size.height + buttonSeparation + exitButton.size.height
-        resumeButton.position = CGPoint(x: 0, y: totalHeight / 4)
-        exitButton.position = CGPoint(x: 0, y: -totalHeight / 4)
+        let totalHeight = resumeButton.size.height + buttonSeparation + exitButton.size.height + muteButton.size.height
+
+        resumeButton.position = CGPoint(x: 0, y: totalHeight / 2 - resumeButton.size.height / 2)
+        exitButton.position = CGPoint(x: 0, y: resumeButton.position.y - resumeButton.size.height / 2 - buttonSeparation - exitButton.size.height / 2)
+        muteButton.position = CGPoint(x: 0, y: exitButton.position.y - exitButton.size.height / 2 - buttonSeparation - muteButton.size.height / 2)
+        unmuteButton.position = CGPoint(x: 0, y: exitButton.position.y - exitButton.size.height / 2 - buttonSeparation - muteButton.size.height / 2)
+
     }
     
     
@@ -547,27 +584,33 @@ class GameScene: SKScene {
         let node = atPoint(touch.location(in: self))
         
         if node.name == "Pause" {
-            
             UserDefaults.standard.setValue(true, forKey: "isPaused")
             isPaused = true
             playGameMusic.run(SKAction.pause())
-            createPausePanel() // Crea il pannello di pausa
-            
+            createPausePanel()
         } else if node.name == "Resume" {
-            
             isPaused = false
-            playGameMusic.run(SKAction.play())
-            pausePanel?.removeFromParent() // Rimuovi il pannello di pausa
-            
-        } else if node.name == "Exit"{
+            if !isMusicMuted {
+                playGameMusic.run(SKAction.play())
+            }
+            pausePanel?.removeFromParent()
+        } else if node.name == "Exit" {
             let menuScene = MenuScene.init(size: view!.bounds.size)
             view?.presentScene(menuScene)
-            
+        } else if node.name == "Mute" {
+            muteButton.isHidden = true
+            unmuteButton.isHidden = false
+            isMusicMuted = true
+            playGameMusic.run(SKAction.pause())
+        } else if node.name == "Unmute" {
+            muteButton.isHidden = false
+            unmuteButton.isHidden = true
+            isMusicMuted = false
+            playGameMusic.run(SKAction.play())
         } else if !isGameStarted {
-            horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
+            horse.physicsBody?.velocity.dy = frame.size.height * 1.2 - horse.position.y
             isGameStarted = true
             run(playJumpSound)
-            
         }
     }
 }
