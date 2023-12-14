@@ -47,20 +47,20 @@ class GameScene: SKScene {
             UserDefaults.standard.set(coinsCollected, forKey: coinsKey)
         }
     }
-
+    
     
     var rotationStartTime: TimeInterval?
-
+    
     let scoreLabelBack = SKLabelNode(text: "Score: 0")
     var pausePanel: SKSpriteNode?
     
-
+    
     func collectCoin() {
         // Increment the coinsCollected variable when a coin is collected
         coinsCollected += 1
         displayTotalCoins() // Update the displayed count
     }
-
+    
     func updateCoinsLabel() {
         // Update the UI label with the current number of collected coins
         let coinLabel = childNode(withName: "CoinLabel") as? SKLabelNode
@@ -101,15 +101,15 @@ class GameScene: SKScene {
         addChild(playGameMusic)
         
         let coinLabel = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
-            coinLabel.text = ("\(SKSpriteNode(imageNamed: "coin"))\(coinsCollected)") // Display the initial count
-            coinLabel.fontSize = 24
-            coinLabel.fontColor = SKColor.white
-            coinLabel.horizontalAlignmentMode = .center
-            coinLabel.verticalAlignmentMode = .center
-            coinLabel.position = CGPoint(x: frame.width - 330, y: frame.height - 50)
-            coinLabel.zPosition = ZPositions.ui
-            coinLabel.name = "CoinLabel" // Add a name to reference it later
-            addChild(coinLabel) // Add the coin label as a child
+        coinLabel.text = ("\(SKSpriteNode(imageNamed: "coin"))\(coinsCollected)") // Display the initial count
+        coinLabel.fontSize = 24
+        coinLabel.fontColor = SKColor.white
+        coinLabel.horizontalAlignmentMode = .center
+        coinLabel.verticalAlignmentMode = .center
+        coinLabel.position = CGPoint(x: frame.width - 330, y: frame.height - 50)
+        coinLabel.zPosition = ZPositions.ui
+        coinLabel.name = "CoinLabel" // Add a name to reference it later
+        addChild(coinLabel) // Add the coin label as a child
         
         // Pause button
         let pauseButton = SKSpriteNode(imageNamed: "pauseButton")
@@ -204,6 +204,8 @@ class GameScene: SKScene {
         else {
             platform = SKSpriteNode(imageNamed: "platformRight")
         }
+        
+//        platform.setScale(2.5)
         platform.position = position
         platform.zPosition = ZPositions.platform
         platform.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: platform.size.width, height: platform.size.height/20))
@@ -218,7 +220,7 @@ class GameScene: SKScene {
         let menuScene = MenuScene(size: view!.bounds.size)
         view?.presentScene(menuScene)
     }
-
+    
     override func update(_ currentTime: TimeInterval) {
         // Check if the horse is rotating in the x-axis for more than 4 seconds
         if abs(horse.zRotation) > 0.1 {
@@ -234,7 +236,7 @@ class GameScene: SKScene {
         } else {
             rotationStartTime = nil // Reset rotation tracking if not rotating
         }
-
+        
         checkPhoneTilt()
         if isGameStarted {
             checkHorsePosition()
@@ -243,7 +245,7 @@ class GameScene: SKScene {
             checkYellowBorder()
         }
     }
-
+    
     
     func checkYellowBorder() {
         if isInverted {
@@ -504,7 +506,7 @@ class GameScene: SKScene {
                 animate(platform: platform, isLeft: false)
             }
         }
-        else if Int.random(in: 1...2) == 1 {
+        else if Int.random(in: 1...33) == 1 {
             platform.texture = SKTexture(imageNamed: "platformBird" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.birdCategory
@@ -527,7 +529,7 @@ class GameScene: SKScene {
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.coinCategory
         }
-
+        
         else if Int.random(in: 1...7) == 1 {
             platform.texture = SKTexture(imageNamed: "cloud" + direction)
             updateSizeOf(platform: platform)
@@ -536,6 +538,7 @@ class GameScene: SKScene {
         else {
             platform.texture = SKTexture(imageNamed: "platform" + direction)
             updateSizeOf(platform: platform)
+            
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
         }
         
@@ -578,13 +581,13 @@ class GameScene: SKScene {
     
     let muteButton = SKSpriteNode(imageNamed: "muteButton")
     let unmuteButton = SKSpriteNode(imageNamed: "unmuteButton")
-
+    
     var isMusicMuted: Bool = false
     
     
-//    var muteButton: SKSpriteNode!
-//    var unmuteButton: SKSpriteNode!
-
+    //    var muteButton: SKSpriteNode!
+    //    var unmuteButton: SKSpriteNode!
+    
     
     func createPausePanel() {
         // Panel
@@ -610,22 +613,22 @@ class GameScene: SKScene {
         pausePanel?.addChild(exitButton)
         
         // Mute Button
-//        let muteButton = SKSpriteNode(imageNamed: "muteButton")
+        //        let muteButton = SKSpriteNode(imageNamed: "muteButton")
         muteButton.setScale(0.4)
         muteButton.zPosition = ZPositions.ui + 2
         muteButton.name = "Mute"
         pausePanel?.addChild(muteButton)
         
         // Unmute Button
-//        let unmuteButton = SKSpriteNode(imageNamed: "unmuteButton")
+        //        let unmuteButton = SKSpriteNode(imageNamed: "unmuteButton")
         unmuteButton.setScale(0.4)
         unmuteButton.zPosition = ZPositions.ui + 2
         unmuteButton.name = "Unmute"
         pausePanel?.addChild(unmuteButton)
         
-//        // Set initial button visibility based on mute state
-//        muteButton.isHidden = false
-//        unmuteButton.isHidden = true
+        //        // Set initial button visibility based on mute state
+        //        muteButton.isHidden = false
+        //        unmuteButton.isHidden = true
         
         
         muteButton.isHidden = isMusicMuted
@@ -634,12 +637,12 @@ class GameScene: SKScene {
         // Set positions
         let buttonSeparation: CGFloat = 50.0 // Adjust this value based on your preference
         let totalHeight = resumeButton.size.height + buttonSeparation + exitButton.size.height + muteButton.size.height
-
+        
         resumeButton.position = CGPoint(x: 0, y: totalHeight / 2 - resumeButton.size.height / 2)
         exitButton.position = CGPoint(x: 0, y: resumeButton.position.y - resumeButton.size.height / 2 - buttonSeparation - exitButton.size.height / 2)
         muteButton.position = CGPoint(x: 0, y: exitButton.position.y - exitButton.size.height / 2 - buttonSeparation - muteButton.size.height / 2)
         unmuteButton.position = CGPoint(x: 0, y: exitButton.position.y - exitButton.size.height / 2 - buttonSeparation - muteButton.size.height / 2)
-
+        
     }
     
     
