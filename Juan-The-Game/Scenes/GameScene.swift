@@ -185,74 +185,69 @@ class GameScene: SKScene {
     func checkYellowBorder() {
         if isInverted {
             if !yellowBorder{
-                /*
-                 let borderRect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-                 let borderPath = UIBezierPath(rect: borderRect)
-                 
-                 let border = SKShapeNode(path: borderPath.cgPath)
-                 border.position = CGPoint(x: 0, y: 0)
-                 border.strokeColor = .yellow
-                 border.lineWidth = 20
-                 border.zPosition = ZPositions.border
-                 border.name = "border"
-                 */
                 
-                /*
-                 let side1 = SKShapeNode()
-                 side1.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height), cornerRadius: 60).cgPath
-                 side1.position = CGPoint(x: 0, y: 0)
-                 side1.strokeColor = UIColor.yellow
-                 side1.lineWidth = 30
-                 */
+                let side1 = SKShapeNode()
+                side1.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: frame.width, height: 20), cornerRadius: 30).cgPath
+                side1.position = CGPoint(x: 0, y: frame.maxY)
+                side1.strokeColor = .yellow
+                side1.glowWidth = 30
+                side1.lineWidth = 15
                 
-                let path1  = CGPath.init(rect: CGRect.init(x: 0, y: frame.maxY, width: frame.size.width, height: frame.size.height), transform: nil)
+                let side2 = SKShapeNode()
+                side2.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 20, height: frame.height), cornerRadius: 30).cgPath
+                side2.position = CGPoint(x: frame.maxX-15, y: 0)
+                side2.strokeColor = .yellow
+                side2.glowWidth = 30
+                side2.lineWidth = 15
                 
-                let path2 = CGPath.init(rect: CGRect.init(x: frame.maxX, y: frame.maxY, width: frame.size.width, height: frame.size.height), transform: nil)
+                let side3 = SKShapeNode()
+                side3.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: frame.width, height: 20), cornerRadius: 30).cgPath
+                side3.position = CGPoint(x: 0, y: 0)
+                side3.strokeColor = .yellow
+                side3.glowWidth = 30
+                side3.lineWidth = 15
                 
-                let path3 = CGPath.init(rect: CGRect.init(x: frame.maxX, y: 0, width: frame.size.width, height: frame.size.height), transform: nil)
-                
-                let path4 = CGPath.init(rect: CGRect.init(x: 0, y: 0, width: frame.size.width, height: frame.size.height), transform: nil)
-                
-                
-                let shapeLayer = CAShapeLayer()
-                self.view?.layer.addSublayer(shapeLayer)
-                shapeLayer.fillColor = UIColor.clear.cgColor
-                shapeLayer.path = path1
-                
-                let anim1 = CABasicAnimation.init(keyPath: "path")
-                anim1.duration = 1.0
-                anim1.fromValue  = path1
-                anim1.toValue = path2
-                anim1.isRemovedOnCompletion  = true
-                
-                let side1 = SKShapeNode.init(path: path1)
-                side1.strokeColor = UIColor.yellow
-                side1.lineWidth = 100
-                
-                let side2 = SKShapeNode.init(path: path2)
-                side1.strokeColor = UIColor.yellow
-                side1.lineWidth = 100
-                
-                let side3 = SKShapeNode.init(path: path3)
-                side1.strokeColor = UIColor.yellow
-                side1.lineWidth = 100
-                
-                let side4 = SKShapeNode.init(path: path4)
-                side1.strokeColor = UIColor.yellow
-                side1.lineWidth = 100
+                let side4 = SKShapeNode()
+                side4.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 20, height: frame.height), cornerRadius: 30).cgPath
+                side4.position = CGPoint(x: 0, y: 0)
+                side4.strokeColor = .yellow
+                side4.glowWidth = 30
+                side4.lineWidth = 15
                 
                 addChild(side1)
                 addChild(side2)
                 addChild(side3)
                 addChild(side4)
                 
-                shapeLayer.add(anim1, forKey:
-                                "ani1")
-                side1.run(SKAction.customAction(withDuration: anim1.duration, actionBlock: { (node, timeDuration) in
-                    (node as! SKShapeNode).path = shapeLayer.presentation()?.path
+                let action1 = SKAction.move(to: CGPoint(x: frame.maxX, y: frame.maxY), duration: 0.75)
+                side1.run(action1)
+                
+                let action2 = SKAction.move(to: CGPoint(x: frame.maxX, y: -frame.maxY), duration: 0.75)
+                
+                
+                let action3 = SKAction.move(to: CGPoint(x: -frame.maxX, y: 0), duration: 0.75)
+                
+                
+                let action4 = SKAction.move(to: CGPoint(x: 0, y: frame.maxY), duration: 0.75)
+                
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                    side1.removeFromParent()
+                    side2.run(action2)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                        side2.removeFromParent()
+                        side3.run(action3)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                            side3.removeFromParent()
+                            side4.run(action4)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                                side4.removeFromParent()
+                            }
+                        }
                     }
-                                               )
-                )
+                }
+                
+                
                 yellowBorder = true
             }
         }
@@ -416,20 +411,22 @@ class GameScene: SKScene {
         
         platform.removeAllActions()
         platform.alpha = 1.0
-        if Int.random(in: 1...60) == 1 {
-            platform.texture = SKTexture(imageNamed: "duck")
-            updateSizeOf(platform: platform)
-            platform.physicsBody?.categoryBitMask = PhysicsCategories.duck
-        }
-        else if Int.random(in: 1...60) == 1 {
-            platform.texture = SKTexture(imageNamed: "duck2")
-            updateSizeOf(platform: platform)
-            platform.physicsBody?.categoryBitMask = PhysicsCategories.duck2
-        }
-        else if Int.random(in: 1...80) == 1 {
-            platform.texture = SKTexture(imageNamed: "duck3")
-            updateSizeOf(platform: platform)
-            platform.physicsBody?.categoryBitMask = PhysicsCategories.duck3
+        if Int.random(in: 1...80) == 1{
+            if Int.random(in: 1...10) == 1 {
+                platform.texture = SKTexture(imageNamed: "duck")
+                updateSizeOf(platform: platform)
+                platform.physicsBody?.categoryBitMask = PhysicsCategories.duck
+            }
+            else if Int.random(in: 1...20) == 1 {
+                platform.texture = SKTexture(imageNamed: "duck2")
+                updateSizeOf(platform: platform)
+                platform.physicsBody?.categoryBitMask = PhysicsCategories.duck2
+            }
+            else if Int.random(in: 1...30) == 1 {
+                platform.texture = SKTexture(imageNamed: "duck3")
+                updateSizeOf(platform: platform)
+                platform.physicsBody?.categoryBitMask = PhysicsCategories.duck3
+            }
         }
         else if Int.random(in: 1...7) == 1 {
             platform.texture = SKTexture(imageNamed: "pig" + direction)
@@ -444,7 +441,7 @@ class GameScene: SKScene {
                 animate(platform: platform, isLeft: false)
             }
         }
-        else if Int.random(in: 1...35) == 1 {
+        else if Int.random(in: 1...2) == 1 {
             platform.texture = SKTexture(imageNamed: "platformBird" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.birdCategory
@@ -457,7 +454,7 @@ class GameScene: SKScene {
                 animate(platform: platform, isLeft: false)
             }
         }
-        else if Int.random(in: 1...55) == 1 {
+        else if Int.random(in: 1...40) == 1 {
             platform.texture = SKTexture(imageNamed: "platformFrog")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.frogCategory
