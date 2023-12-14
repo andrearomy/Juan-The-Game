@@ -26,6 +26,7 @@ class GameScene: SKScene {
     var highestScore = 0
     var isGameStarted = false
     let playJumpSound = SKAction.playSoundFileNamed("jump", waitForCompletion: false)
+    let playCoinSound = SKAction.playSoundFileNamed("coin", waitForCompletion: false)
     let playFrogSound = SKAction.playSoundFileNamed("frog", waitForCompletion: false)
     let playPigSound = SKAction.playSoundFileNamed("pig", waitForCompletion: false)
     let playDuckSound = SKAction.playSoundFileNamed("duck", waitForCompletion: false)
@@ -38,12 +39,42 @@ class GameScene: SKScene {
     var startRainbow = false
     var yellowBorder = false
     
+    let coinsKey = "CoinsCollected"
     
+    var coinsCollected = 0 {
+        didSet {
+            // Save the updated value to UserDefaults
+            UserDefaults.standard.set(coinsCollected, forKey: coinsKey)
+        }
+    }
+
+    
+    var rotationStartTime: TimeInterval?
+
     let scoreLabelBack = SKLabelNode(text: "Score: 0")
     var pausePanel: SKSpriteNode?
     
 
+    func collectCoin() {
+        // Increment the coinsCollected variable when a coin is collected
+        coinsCollected += 1
+        displayTotalCoins() // Update the displayed count
+    }
+
+    func updateCoinsLabel() {
+        // Update the UI label with the current number of collected coins
+        let coinLabel = childNode(withName: "CoinLabel") as? SKLabelNode
+        coinLabel?.text = "Coins: \(coinsCollected)"
+    }
     
+    func displayTotalCoins() {
+        // Retrieve the total coins collected from UserDefaults
+        if let totalCoins = UserDefaults.standard.value(forKey: coinsKey) as? Int {
+            coinsCollected = totalCoins
+        }
+        // Use coinsCollected to display or handle the total coins in your game UI
+        updateCoinsLabel() // Call the function to update the label
+    }
     
     override func didMove(to view: SKView) {
         motionManager = CMMotionManager()
@@ -51,6 +82,7 @@ class GameScene: SKScene {
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         layoutScene()
+        displayTotalCoins()
         
         
         //        if isPaused {
@@ -67,6 +99,17 @@ class GameScene: SKScene {
         addBottom()
         makePlatforms()
         addChild(playGameMusic)
+        
+        let coinLabel = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
+            coinLabel.text = ("\(SKSpriteNode(imageNamed: "coin"))\(coinsCollected)") // Display the initial count
+            coinLabel.fontSize = 24
+            coinLabel.fontColor = SKColor.white
+            coinLabel.horizontalAlignmentMode = .center
+            coinLabel.verticalAlignmentMode = .center
+            coinLabel.position = CGPoint(x: frame.width - 330, y: frame.height - 50)
+            coinLabel.zPosition = ZPositions.ui
+            coinLabel.name = "CoinLabel" // Add a name to reference it later
+            addChild(coinLabel) // Add the coin label as a child
         
         // Pause button
         let pauseButton = SKSpriteNode(imageNamed: "pauseButton")
@@ -127,7 +170,7 @@ class GameScene: SKScene {
         horse.physicsBody = SKPhysicsBody(circleOfRadius: horse.size.width/2)
         horse.physicsBody?.affectedByGravity = true
         horse.physicsBody?.categoryBitMask = PhysicsCategories.horseCategory
-        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory | PhysicsCategories.duck2 | PhysicsCategories.duck3 | PhysicsCategories.frogCategory | PhysicsCategories.pigCategory
+        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory | PhysicsCategories.duck2 | PhysicsCategories.duck3 | PhysicsCategories.frogCategory | PhysicsCategories.pigCategory | PhysicsCategories.coinCategory
         horse.physicsBody?.collisionBitMask = PhysicsCategories.none
         addChild(horse)
     }
@@ -170,90 +213,104 @@ class GameScene: SKScene {
         platforms.append(platform)
         addChild(platform)
     }
-    
+    func goToMenuScene() {
+        // Transition to the menu scene
+        let menuScene = MenuScene(size: view!.bounds.size)
+        view?.presentScene(menuScene)
+    }
+
     override func update(_ currentTime: TimeInterval) {
+        // Check if the horse is rotating in the x-axis for more than 4 seconds
+        if abs(horse.zRotation) > 0.1 {
+            if rotationStartTime == nil {
+                rotationStartTime = currentTime
+            } else {
+                let elapsedTime = currentTime - rotationStartTime!
+                if elapsedTime > 4 {
+                    goToMenuScene()
+                    rotationStartTime = nil // Reset rotation tracking
+                }
+            }
+        } else {
+            rotationStartTime = nil // Reset rotation tracking if not rotating
+        }
+
         checkPhoneTilt()
         if isGameStarted {
-            
-            //            addChild(playGameMusic)
             checkHorsePosition()
             checkHorseVelocity()
             updatePlatformsPositions()
             checkYellowBorder()
         }
     }
+
     
     func checkYellowBorder() {
         if isInverted {
             if !yellowBorder{
-                /*
-                 let borderRect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
-                 let borderPath = UIBezierPath(rect: borderRect)
-                 
-                 let border = SKShapeNode(path: borderPath.cgPath)
-                 border.position = CGPoint(x: 0, y: 0)
-                 border.strokeColor = .yellow
-                 border.lineWidth = 20
-                 border.zPosition = ZPositions.border
-                 border.name = "border"
-                 */
                 
-                /*
-                 let side1 = SKShapeNode()
-                 side1.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height), cornerRadius: 60).cgPath
-                 side1.position = CGPoint(x: 0, y: 0)
-                 side1.strokeColor = UIColor.yellow
-                 side1.lineWidth = 30
-                 */
+                let side1 = SKShapeNode()
+                side1.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: frame.width, height: 20), cornerRadius: 30).cgPath
+                side1.position = CGPoint(x: 0, y: frame.maxY)
+                side1.strokeColor = .yellow
+                side1.glowWidth = 30
+                side1.lineWidth = 15
                 
-                let path1  = CGPath.init(rect: CGRect.init(x: 0, y: frame.maxY, width: frame.size.width, height: frame.size.height), transform: nil)
+                let side2 = SKShapeNode()
+                side2.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 20, height: frame.height), cornerRadius: 30).cgPath
+                side2.position = CGPoint(x: frame.maxX-15, y: 0)
+                side2.strokeColor = .yellow
+                side2.glowWidth = 30
+                side2.lineWidth = 15
                 
-                let path2 = CGPath.init(rect: CGRect.init(x: frame.maxX, y: frame.maxY, width: frame.size.width, height: frame.size.height), transform: nil)
+                let side3 = SKShapeNode()
+                side3.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: frame.width, height: 20), cornerRadius: 30).cgPath
+                side3.position = CGPoint(x: 0, y: 0)
+                side3.strokeColor = .yellow
+                side3.glowWidth = 30
+                side3.lineWidth = 15
                 
-                let path3 = CGPath.init(rect: CGRect.init(x: frame.maxX, y: 0, width: frame.size.width, height: frame.size.height), transform: nil)
-                
-                let path4 = CGPath.init(rect: CGRect.init(x: 0, y: 0, width: frame.size.width, height: frame.size.height), transform: nil)
-                
-                
-                let shapeLayer = CAShapeLayer()
-                self.view?.layer.addSublayer(shapeLayer)
-                shapeLayer.fillColor = UIColor.clear.cgColor
-                shapeLayer.path = path1
-                
-                let anim1 = CABasicAnimation.init(keyPath: "path")
-                anim1.duration = 1.0
-                anim1.fromValue  = path1
-                anim1.toValue = path2
-                anim1.isRemovedOnCompletion  = true
-                
-                let side1 = SKShapeNode.init(path: path1)
-                side1.strokeColor = UIColor.yellow
-                side1.lineWidth = 100
-                
-                let side2 = SKShapeNode.init(path: path2)
-                side1.strokeColor = UIColor.yellow
-                side1.lineWidth = 100
-                
-                let side3 = SKShapeNode.init(path: path3)
-                side1.strokeColor = UIColor.yellow
-                side1.lineWidth = 100
-                
-                let side4 = SKShapeNode.init(path: path4)
-                side1.strokeColor = UIColor.yellow
-                side1.lineWidth = 100
+                let side4 = SKShapeNode()
+                side4.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 20, height: frame.height), cornerRadius: 30).cgPath
+                side4.position = CGPoint(x: 0, y: 0)
+                side4.strokeColor = .yellow
+                side4.glowWidth = 30
+                side4.lineWidth = 15
                 
                 addChild(side1)
                 addChild(side2)
                 addChild(side3)
                 addChild(side4)
                 
-                shapeLayer.add(anim1, forKey:
-                                "ani1")
-                side1.run(SKAction.customAction(withDuration: anim1.duration, actionBlock: { (node, timeDuration) in
-                    (node as! SKShapeNode).path = shapeLayer.presentation()?.path
+                let action1 = SKAction.move(to: CGPoint(x: frame.maxX, y: frame.maxY), duration: 0.75)
+                side1.run(action1)
+                
+                let action2 = SKAction.move(to: CGPoint(x: frame.maxX, y: -frame.maxY), duration: 0.75)
+                
+                
+                let action3 = SKAction.move(to: CGPoint(x: -frame.maxX, y: 0), duration: 0.75)
+                
+                
+                let action4 = SKAction.move(to: CGPoint(x: 0, y: frame.maxY), duration: 0.75)
+                
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                    side1.removeFromParent()
+                    side2.run(action2)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                        side2.removeFromParent()
+                        side3.run(action3)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                            side3.removeFromParent()
+                            side4.run(action4)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                                side4.removeFromParent()
+                            }
+                        }
                     }
-                                               )
-                )
+                }
+                
+                
                 yellowBorder = true
             }
         }
@@ -417,20 +474,22 @@ class GameScene: SKScene {
         
         platform.removeAllActions()
         platform.alpha = 1.0
-        if Int.random(in: 1...60) == 1 {
-            platform.texture = SKTexture(imageNamed: "duck")
-            updateSizeOf(platform: platform)
-            platform.physicsBody?.categoryBitMask = PhysicsCategories.duck
-        }
-        else if Int.random(in: 1...60) == 1 {
-            platform.texture = SKTexture(imageNamed: "duck2")
-            updateSizeOf(platform: platform)
-            platform.physicsBody?.categoryBitMask = PhysicsCategories.duck2
-        }
-        else if Int.random(in: 1...80) == 1 {
-            platform.texture = SKTexture(imageNamed: "duck3")
-            updateSizeOf(platform: platform)
-            platform.physicsBody?.categoryBitMask = PhysicsCategories.duck3
+        if Int.random(in: 1...80) == 1{
+            if Int.random(in: 1...10) == 1 {
+                platform.texture = SKTexture(imageNamed: "duck")
+                updateSizeOf(platform: platform)
+                platform.physicsBody?.categoryBitMask = PhysicsCategories.duck
+            }
+            else if Int.random(in: 1...20) == 1 {
+                platform.texture = SKTexture(imageNamed: "duck2")
+                updateSizeOf(platform: platform)
+                platform.physicsBody?.categoryBitMask = PhysicsCategories.duck2
+            }
+            else if Int.random(in: 1...30) == 1 {
+                platform.texture = SKTexture(imageNamed: "duck3")
+                updateSizeOf(platform: platform)
+                platform.physicsBody?.categoryBitMask = PhysicsCategories.duck3
+            }
         }
         else if Int.random(in: 1...7) == 1 {
             platform.texture = SKTexture(imageNamed: "pig" + direction)
@@ -445,7 +504,7 @@ class GameScene: SKScene {
                 animate(platform: platform, isLeft: false)
             }
         }
-        else if Int.random(in: 1...35) == 1 {
+        else if Int.random(in: 1...2) == 1 {
             platform.texture = SKTexture(imageNamed: "platformBird" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.birdCategory
@@ -458,11 +517,17 @@ class GameScene: SKScene {
                 animate(platform: platform, isLeft: false)
             }
         }
-        else if Int.random(in: 1...55) == 1 {
+        else if Int.random(in: 1...40) == 1 {
             platform.texture = SKTexture(imageNamed: "platformFrog")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.frogCategory
         }
+        else if Int.random(in: 1...10) == 1 {
+            platform.texture = SKTexture(imageNamed: "coin")
+            updateSizeOf(platform: platform)
+            platform.physicsBody?.categoryBitMask = PhysicsCategories.coinCategory
+        }
+
         else if Int.random(in: 1...7) == 1 {
             platform.texture = SKTexture(imageNamed: "cloud" + direction)
             updateSizeOf(platform: platform)
@@ -647,6 +712,15 @@ extension GameScene: SKPhysicsContactDelegate {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                         self.isSuperJumpOn = false
                         self.superJumpCounter = 0
+                    }
+                }
+                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.coinCategory {
+                    run(playCoinSound)
+                    collectCoin()
+                    horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
+                    if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
+                        platform.physicsBody?.categoryBitMask = PhysicsCategories.none
+                        platform.run(SKAction.fadeOut(withDuration: 0.5))
                     }
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck2 {
