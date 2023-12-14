@@ -213,12 +213,45 @@ class GameScene: SKScene {
         platforms.append(platform)
         addChild(platform)
     }
+    
+    
+    func explodeHorse() {
+        // Pause the physics simulation for the horse
+        horse.physicsBody?.isDynamic = false
+        self.horse.isHidden = true
+
+        let explosionContainer = SKNode()
+        explosionContainer.position = horse.position
+        addChild(explosionContainer)
+
+        let explosionSprite = SKSpriteNode(imageNamed: "explosion1")
+        explosionSprite.zRotation = 0  // Reset zRotation to zero
+        explosionContainer.addChild(explosionSprite)
+
+        var explosionAnimation: [SKTexture] = []
+        for i in 1...8 {
+            let frameName = "explosion\(i)"
+            let texture = SKTexture(imageNamed: frameName)
+            explosionAnimation.append(texture)
+        }
+
+        let animateAction = SKAction.animate(with: explosionAnimation, timePerFrame: 0.1, resize: true, restore: true)
+        let sequence = SKAction.sequence([animateAction])
+        
+        explosionSprite.run(sequence) {
+            explosionContainer.removeFromParent()
+            self.goToMenuScene()
+        }
+    }
+
+
     func goToMenuScene() {
         // Transition to the menu scene
         let menuScene = MenuScene(size: view!.bounds.size)
         view?.presentScene(menuScene)
     }
-
+    
+    
     override func update(_ currentTime: TimeInterval) {
         // Check if the horse is rotating in the x-axis for more than 4 seconds
         if abs(horse.zRotation) > 0.1 {
@@ -227,7 +260,7 @@ class GameScene: SKScene {
             } else {
                 let elapsedTime = currentTime - rotationStartTime!
                 if elapsedTime > 4 {
-                    goToMenuScene()
+                    explodeHorse()
                     rotationStartTime = nil // Reset rotation tracking
                 }
             }
