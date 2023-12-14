@@ -19,7 +19,36 @@ class MenuScene: SKScene {
         addLastScore()
         addHighScore()
         addPlayButton()
+        addShopButton()
     }
+    
+    func createButtonAnimation() -> SKAction {
+            let buttonFrames = ["playbutton1", "playbutton2"]
+            
+            var frames: [SKTexture] = []
+            for frameName in buttonFrames {
+                frames.append(SKTexture(imageNamed: frameName))
+            }
+            
+            let buttonAnimation = SKAction.animate(with: frames, timePerFrame: 0.6)
+            let repeatAction = SKAction.repeatForever(buttonAnimation)
+            
+            return repeatAction
+        }
+    
+    func addShopButton() {
+        let shopButton = SKSpriteNode(imageNamed: "shopButtonImageName")
+        shopButton.position = CGPoint(x: frame.midX, y: frame.midY / 6) // Adjust the position as needed
+        shopButton.zPosition = ZPositions.logo
+        addChild(shopButton)
+        
+        shopButton.name = "shopButton"
+        
+        // Add animation or any visual feedback for the button
+        let buttonAnimation = createButtonAnimation()
+        shopButton.run(buttonAnimation)
+    }
+
     
     func addBackground() {
             let background = SKSpriteNode(imageNamed: "bgmain")
@@ -130,22 +159,15 @@ class MenuScene: SKScene {
             
             if touchedNode.name == "playbutton1" {
                 playButtonTapped()
+            } else if touchedNode.name == "shopButton" {
+                shopButtonTapped()
             }
         }
     }
     
-    func createButtonAnimation() -> SKAction {
-        let buttonFrames = ["playbutton1", "playbutton2"]
-        
-        var frames: [SKTexture] = []
-        for frameName in buttonFrames {
-            frames.append(SKTexture(imageNamed: frameName))
-        }
-        
-        let buttonAnimation = SKAction.animate(with: frames, timePerFrame: 0.6)
-        let repeatAction = SKAction.repeatForever(buttonAnimation)
-        
-        return repeatAction
+    func shopButtonTapped() {
+        let shopScene = ShopScene(size: view!.bounds.size)
+        view?.presentScene(shopScene, transition: .fade(withDuration: 0.5))
     }
 
 

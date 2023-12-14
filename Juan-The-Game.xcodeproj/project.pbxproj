@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		990F07E82B2B0F7700489055 /* coin.wav in Resources */ = {isa = PBXBuildFile; fileRef = 990F07E72B2B0F7700489055 /* coin.wav */; };
+		990F07EA2B2B133900489055 /* ShopScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 990F07E92B2B133900489055 /* ShopScene.swift */; };
 		996124FB2B1F914B007F316D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996124FA2B1F914B007F316D /* AppDelegate.swift */; };
 		996125012B1F914B007F316D /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996125002B1F914B007F316D /* GameScene.swift */; };
 		996125032B1F914B007F316D /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 996125022B1F914B007F316D /* GameViewController.swift */; };
@@ -20,6 +21,7 @@
 		996EDDD82B1F95D900F134B3 /* jump.wav in Resources */ = {isa = PBXBuildFile; fileRef = 996EDDD42B1F95D900F134B3 /* jump.wav */; };
 		996EDDD92B1F95D900F134B3 /* break.wav in Resources */ = {isa = PBXBuildFile; fileRef = 996EDDD52B1F95D900F134B3 /* break.wav */; };
 		996EDDDA2B1F95D900F134B3 /* gameOver.wav in Resources */ = {isa = PBXBuildFile; fileRef = 996EDDD62B1F95D900F134B3 /* gameOver.wav */; };
+		998FB9412B2B964A00384DC7 /* Horse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998FB9402B2B964A00384DC7 /* Horse.swift */; };
 		99EAA85B2B2A527900386863 /* pig.wav in Resources */ = {isa = PBXBuildFile; fileRef = 99EAA8572B2A527900386863 /* pig.wav */; };
 		99EAA85C2B2A527900386863 /* duck.wav in Resources */ = {isa = PBXBuildFile; fileRef = 99EAA8582B2A527900386863 /* duck.wav */; };
 		99EAA85D2B2A527900386863 /* bird.wav in Resources */ = {isa = PBXBuildFile; fileRef = 99EAA8592B2A527900386863 /* bird.wav */; };
@@ -31,6 +33,7 @@
 
 /* Begin PBXFileReference section */
 		990F07E72B2B0F7700489055 /* coin.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = coin.wav; sourceTree = "<group>"; };
+		990F07E92B2B133900489055 /* ShopScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopScene.swift; sourceTree = "<group>"; };
 		996124F72B1F914B007F316D /* Juan-The-Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Juan-The-Game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		996124FA2B1F914B007F316D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		996125002B1F914B007F316D /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -44,6 +47,7 @@
 		996EDDD42B1F95D900F134B3 /* jump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jump.wav; sourceTree = "<group>"; };
 		996EDDD52B1F95D900F134B3 /* break.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = break.wav; sourceTree = "<group>"; };
 		996EDDD62B1F95D900F134B3 /* gameOver.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gameOver.wav; sourceTree = "<group>"; };
+		998FB9402B2B964A00384DC7 /* Horse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Horse.swift; sourceTree = "<group>"; };
 		99EAA8572B2A527900386863 /* pig.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = pig.wav; sourceTree = "<group>"; };
 		99EAA8582B2A527900386863 /* duck.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = duck.wav; sourceTree = "<group>"; };
 		99EAA8592B2A527900386863 /* bird.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bird.wav; sourceTree = "<group>"; };
@@ -102,6 +106,8 @@
 			children = (
 				996125002B1F914B007F316D /* GameScene.swift */,
 				996125122B1F9228007F316D /* MenuScene.swift */,
+				990F07E92B2B133900489055 /* ShopScene.swift */,
+				998FB9402B2B964A00384DC7 /* Horse.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -214,9 +220,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				990F07EA2B2B133900489055 /* ShopScene.swift in Sources */,
 				996125012B1F914B007F316D /* GameScene.swift in Sources */,
 				996125132B1F9228007F316D /* MenuScene.swift in Sources */,
 				996125032B1F914B007F316D /* GameViewController.swift in Sources */,
+				998FB9412B2B964A00384DC7 /* Horse.swift in Sources */,
 				996124FB2B1F914B007F316D /* AppDelegate.swift in Sources */,
 				996125162B1F926B007F316D /* Settings.swift in Sources */,
 			);

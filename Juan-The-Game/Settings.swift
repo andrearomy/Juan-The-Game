@@ -19,8 +19,6 @@ enum PhysicsCategories {
     static let birdCategory: UInt32 = 0x1 << 5
     static let frogCategory: UInt32 = 0x1 << 8
     static let coinCategory: UInt32 = 0x1 << 10
-
-    
 }
 
 enum ZPositions {
