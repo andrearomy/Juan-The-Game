@@ -26,6 +26,7 @@ class GameScene: SKScene {
     var highestScore = 0
     var isGameStarted = false
     let playJumpSound = SKAction.playSoundFileNamed("jump", waitForCompletion: false)
+    let playCoinSound = SKAction.playSoundFileNamed("coin", waitForCompletion: false)
     let playFrogSound = SKAction.playSoundFileNamed("frog", waitForCompletion: false)
     let playPigSound = SKAction.playSoundFileNamed("pig", waitForCompletion: false)
     let playDuckSound = SKAction.playSoundFileNamed("duck", waitForCompletion: false)
@@ -38,12 +39,42 @@ class GameScene: SKScene {
     var startRainbow = false
     var yellowBorder = false
     
+    let coinsKey = "CoinsCollected"
     
+    var coinsCollected = 0 {
+        didSet {
+            // Save the updated value to UserDefaults
+            UserDefaults.standard.set(coinsCollected, forKey: coinsKey)
+        }
+    }
+
+    
+    var rotationStartTime: TimeInterval?
+
     let scoreLabelBack = SKLabelNode(text: "Score: 0")
     var pausePanel: SKSpriteNode?
     
 
+    func collectCoin() {
+        // Increment the coinsCollected variable when a coin is collected
+        coinsCollected += 1
+        displayTotalCoins() // Update the displayed count
+    }
+
+    func updateCoinsLabel() {
+        // Update the UI label with the current number of collected coins
+        let coinLabel = childNode(withName: "CoinLabel") as? SKLabelNode
+        coinLabel?.text = "Coins: \(coinsCollected)"
+    }
     
+    func displayTotalCoins() {
+        // Retrieve the total coins collected from UserDefaults
+        if let totalCoins = UserDefaults.standard.value(forKey: coinsKey) as? Int {
+            coinsCollected = totalCoins
+        }
+        // Use coinsCollected to display or handle the total coins in your game UI
+        updateCoinsLabel() // Call the function to update the label
+    }
     
     override func didMove(to view: SKView) {
         motionManager = CMMotionManager()
@@ -51,6 +82,7 @@ class GameScene: SKScene {
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         layoutScene()
+        displayTotalCoins()
         
         //        if isPaused {
         //            pauseGame()
@@ -66,6 +98,17 @@ class GameScene: SKScene {
         addBottom()
         makePlatforms()
         addChild(playGameMusic)
+        
+        let coinLabel = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
+            coinLabel.text = ("\(SKSpriteNode(imageNamed: "coin"))\(coinsCollected)") // Display the initial count
+            coinLabel.fontSize = 24
+            coinLabel.fontColor = SKColor.white
+            coinLabel.horizontalAlignmentMode = .center
+            coinLabel.verticalAlignmentMode = .center
+            coinLabel.position = CGPoint(x: frame.width - 330, y: frame.height - 50)
+            coinLabel.zPosition = ZPositions.ui
+            coinLabel.name = "CoinLabel" // Add a name to reference it later
+            addChild(coinLabel) // Add the coin label as a child
         
         // Pause button
         let pauseButton = SKSpriteNode(imageNamed: "pauseButton")
@@ -126,7 +169,7 @@ class GameScene: SKScene {
         horse.physicsBody = SKPhysicsBody(circleOfRadius: horse.size.width/2)
         horse.physicsBody?.affectedByGravity = true
         horse.physicsBody?.categoryBitMask = PhysicsCategories.horseCategory
-        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory | PhysicsCategories.duck2 | PhysicsCategories.duck3 | PhysicsCategories.frogCategory | PhysicsCategories.pigCategory
+        horse.physicsBody?.contactTestBitMask = PhysicsCategories.platformCategory | PhysicsCategories.cloudCategory | PhysicsCategories.duck | PhysicsCategories.birdCategory | PhysicsCategories.duck2 | PhysicsCategories.duck3 | PhysicsCategories.frogCategory | PhysicsCategories.pigCategory | PhysicsCategories.coinCategory
         horse.physicsBody?.collisionBitMask = PhysicsCategories.none
         addChild(horse)
     }
@@ -169,18 +212,37 @@ class GameScene: SKScene {
         platforms.append(platform)
         addChild(platform)
     }
-    
+    func goToMenuScene() {
+        // Transition to the menu scene
+        let menuScene = MenuScene(size: view!.bounds.size)
+        view?.presentScene(menuScene)
+    }
+
     override func update(_ currentTime: TimeInterval) {
+        // Check if the horse is rotating in the x-axis for more than 4 seconds
+        if abs(horse.zRotation) > 0.1 {
+            if rotationStartTime == nil {
+                rotationStartTime = currentTime
+            } else {
+                let elapsedTime = currentTime - rotationStartTime!
+                if elapsedTime > 4 {
+                    goToMenuScene()
+                    rotationStartTime = nil // Reset rotation tracking
+                }
+            }
+        } else {
+            rotationStartTime = nil // Reset rotation tracking if not rotating
+        }
+
         checkPhoneTilt()
         if isGameStarted {
-            
-            //            addChild(playGameMusic)
             checkHorsePosition()
             checkHorseVelocity()
             updatePlatformsPositions()
             checkYellowBorder()
         }
     }
+
     
     func checkYellowBorder() {
         if isInverted {
@@ -462,6 +524,12 @@ class GameScene: SKScene {
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.frogCategory
         }
+        else if Int.random(in: 1...10) == 1 {
+            platform.texture = SKTexture(imageNamed: "coin")
+            updateSizeOf(platform: platform)
+            platform.physicsBody?.categoryBitMask = PhysicsCategories.coinCategory
+        }
+
         else if Int.random(in: 1...7) == 1 {
             platform.texture = SKTexture(imageNamed: "cloud" + direction)
             updateSizeOf(platform: platform)
@@ -604,6 +672,15 @@ extension GameScene: SKPhysicsContactDelegate {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                         self.isSuperJumpOn = false
                         self.superJumpCounter = 0
+                    }
+                }
+                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.coinCategory {
+                    run(playCoinSound)
+                    collectCoin()
+                    horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
+                    if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
+                        platform.physicsBody?.categoryBitMask = PhysicsCategories.none
+                        platform.run(SKAction.fadeOut(withDuration: 0.5))
                     }
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck2 {
