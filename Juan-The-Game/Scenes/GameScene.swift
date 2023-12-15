@@ -41,6 +41,7 @@ class GameScene: SKScene {
     let playDuckSound = SKAction.playSoundFileNamed("duck", waitForCompletion: false)
     let playBirdSound = SKAction.playSoundFileNamed("bird", waitForCompletion: false)
     let playBreakSound = SKAction.playSoundFileNamed("break", waitForCompletion: false)
+    let playExplosionSound = SKAction.playSoundFileNamed("explosion", waitForCompletion: false)
     var isSuperJumpOn = false
     var superJumpCounter: CGFloat = 0
     var playGameMusic = SKAudioNode(fileNamed: "gameMusic")
@@ -60,7 +61,7 @@ class GameScene: SKScene {
     
     var pausePanel: SKSpriteNode?
     func collectCoin() {
-        coinsCollected += 1000
+        coinsCollected += 1
         displayTotalCoins() // Update the displayed count
         
         UserDefaults.standard.set(coinsCollected, forKey: "CoinsCollected")
@@ -266,6 +267,7 @@ class GameScene: SKScene {
             } else {
                 let elapsedTime = currentTime - rotationStartTime!
                 if elapsedTime > 4 {
+                    run(playExplosionSound)
                     explodeHorse()
                     rotationStartTime = nil // Reset rotation tracking
                 }
@@ -533,7 +535,7 @@ class GameScene: SKScene {
         
         platform.removeAllActions()
         platform.alpha = 1.0
-        if Int.random(in: 1...80) == 1{
+        if Int.random(in: 1...20) == 1{
             if Int.random(in: 1...10) == 1 {
                 platform.texture = SKTexture(imageNamed: "duck")
                 updateSizeOf(platform: platform)
