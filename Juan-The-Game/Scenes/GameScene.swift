@@ -61,7 +61,7 @@ class GameScene: SKScene {
     
     var pausePanel: SKSpriteNode?
     func collectCoin() {
-        coinsCollected += 1000
+        coinsCollected += 1
         displayTotalCoins() // Update the displayed count
         
         UserDefaults.standard.set(coinsCollected, forKey: "CoinsCollected")
@@ -535,7 +535,7 @@ class GameScene: SKScene {
         
         platform.removeAllActions()
         platform.alpha = 1.0
-        if Int.random(in: 1...80) == 1{
+        if Int.random(in: 1...20) == 1{
             if Int.random(in: 1...10) == 1 {
                 platform.texture = SKTexture(imageNamed: "duck")
                 updateSizeOf(platform: platform)
