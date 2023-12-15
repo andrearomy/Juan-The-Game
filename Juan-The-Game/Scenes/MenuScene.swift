@@ -38,7 +38,7 @@ class MenuScene: SKScene {
     
     func addShopButton() {
         let shopButton = SKSpriteNode(imageNamed: "shopButtonImageName")
-        shopButton.position = CGPoint(x: frame.midX, y: frame.midY / 6) // Adjust the position as needed
+        shopButton.position = CGPoint(x: frame.midX+150, y: frame.midY / 4.5) // Adjust the position as needed
         shopButton.zPosition = ZPositions.logo
         addChild(shopButton)
         
@@ -97,11 +97,21 @@ class MenuScene: SKScene {
         lastScoreLabel.fontSize = 15
         lastScoreLabel.fontName = "PixelFJ8pt1Normal"
         lastScoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
-        lastScoreLabel.position = CGPoint(x: frame.midX, y: topPosition - (logo.size.height/8) - 15)
+        lastScoreLabel.position = CGPoint(x: frame.midX, y: topPosition - (logo.size.height/8) - 45)
 //        lastScoreLabel.position = CGPoint(x: frame.midX, y: logo.position.y - logo.size.height/2 - 20)
         lastScoreLabel.zPosition = CGFloat.greatestFiniteMagnitude
 //        lastScoreLabel.zPosition = ZPositions.scoreLabel
         addChild(lastScoreLabel)
+        
+        let lastScoreLabelShadow = SKLabelNode(text: "Last Score: " + (formattedScore ?? "0"))
+        lastScoreLabelShadow.fontSize = 15
+        lastScoreLabelShadow.fontName = "PixelFJ8pt1Normal"
+        lastScoreLabelShadow.fontColor = .black
+        lastScoreLabelShadow.position = CGPoint(x: frame.midX+2, y: topPosition - (logo.size.height/8) - 45 - 2)
+//        lastScoreLabel.position = CGPoint(x: frame.midX, y: logo.position.y - logo.size.height/2 - 20)
+        lastScoreLabelShadow.zPosition = 0
+//        lastScoreLabel.zPosition = ZPositions.scoreLabel
+        addChild(lastScoreLabelShadow)
         
     }
     
@@ -123,16 +133,26 @@ class MenuScene: SKScene {
         highScoreLabel.fontSize = 25
         highScoreLabel.fontName = "PixelFJ8pt1Normal"
         highScoreLabel.fontColor = UIColor.init(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
-        highScoreLabel.position = CGPoint(x: frame.midX, y: topPosition - (logo.size.height/8) - 55)
+        highScoreLabel.position = CGPoint(x: frame.midX, y: topPosition - (logo.size.height/8) - 15)
 //        highScoreLabel.position = CGPoint(x: frame.midX, y: logo.position.y - logo.size.height/2 - 52)
         highScoreLabel.zPosition = CGFloat.greatestFiniteMagnitude
 //        highScoreLabel.zPosition = ZPositions.scoreLabel
         addChild(highScoreLabel)
+        
+        let highScoreLabelShadow = SKLabelNode(text: "Highest Score: " + (formattedScore ?? "0"))
+        highScoreLabelShadow.fontSize = 25
+        highScoreLabelShadow.fontName = "PixelFJ8pt1Normal"
+        highScoreLabelShadow.fontColor = .black
+        highScoreLabelShadow.position = CGPoint(x: frame.midX+2, y: topPosition - (logo.size.height/8) - 15 - 2)
+//        highScoreLabel.position = CGPoint(x: frame.midX, y: logo.position.y - logo.size.height/2 - 52)
+        highScoreLabelShadow.zPosition = 0
+//        highScoreLabel.zPosition = ZPositions.scoreLabel
+        addChild(highScoreLabelShadow)
     }
 
     func addPlayButton() {
         let playButton = SKSpriteNode(imageNamed: "playbutton1")
-        playButton.position = CGPoint(x: frame.midX, y: frame.midY / 4)
+        playButton.position = CGPoint(x: frame.midX-50, y: frame.midY / 4.5)
         playButton.zPosition = ZPositions.logo
         addChild(playButton)
         
