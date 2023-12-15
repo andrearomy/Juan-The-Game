@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "bitcoin.png",
+      "filename" : "p-replace-color.php.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "bitcoin@2x.png",
+      "filename" : "p-replace-color.php 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "bitcoin@3x.png",
+      "filename" : "p-replace-color.php 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -99,6 +99,7 @@ class ShopScene: SKScene {
     
     func addHorseNodes() {
         // Add the four horse nodes with different prices
+        addHorseNode(name: "horse", price: 0, position: CGPoint(x: frame.midX, y: frame.midY + 200))
         addHorseNode(name: "black_juan", price: 15, position: CGPoint(x: frame.midX, y: frame.midY + 100))
         addHorseNode(name: "white_juan", price: 50, position: CGPoint(x: frame.midX, y: frame.midY))
         addHorseNode(name: "spotted_juan", price: 100, position: CGPoint(x: frame.midX, y: frame.midY - 100))
@@ -218,6 +219,7 @@ class ShopScene: SKScene {
     
     func getPriceForHorse(name: String) -> Int? {
         switch name {
+            case "horse": return 0
             case "black_juan": return 15
             case "white_juan": return 50
             case "spotted_juan": return 100

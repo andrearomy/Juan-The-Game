@@ -58,7 +58,7 @@ class GameScene: SKScene {
     let scoreLabelBack = SKLabelNode(text: "Score: 0")
     var pausePanel: SKSpriteNode?
     func collectCoin() {
-        coinsCollected += 1000
+        coinsCollected += 15
         displayTotalCoins() // Update the displayed count
         
         UserDefaults.standard.set(coinsCollected, forKey: "CoinsCollected")
@@ -83,13 +83,14 @@ class GameScene: SKScene {
         motionManager.startAccelerometerUpdates()
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-        layoutScene()
         displayTotalCoins()
     }
     
     func loadSelectedHorse() {
         // Check the value of selectedHorse and load the respective horse in the game
         switch selectedHorse {
+        case "horse":
+            horse.texture = SKTexture(imageNamed: "horse")
         case "black_juan":
             // Load black_juan horse sprite or configure gameplay accordingly
             print("Loading Black Juan")
@@ -97,7 +98,15 @@ class GameScene: SKScene {
         case "white_juan":
             // Load white_juan horse sprite or configure gameplay accordingly
             print("Loading White Juan")
-            horse.texture = SKTexture(imageNamed: "white_juan") // Assuming "white_juan" is the image name
+            horse.texture = SKTexture(imageNamed: "white_juan") 
+        case "spotted_juan":
+            // Load black_juan horse sprite or configure gameplay accordingly
+            print("Loading Sppotted Juan")
+            horse.texture = SKTexture(imageNamed: "spotted_juan") // Assuming "black_juan" is the image name
+        case "golden_juan":
+            // Load white_juan horse sprite or configure gameplay accordingly
+            print("Loading Golden Juan")
+            horse.texture = SKTexture(imageNamed: "golden_juan")// Assuming "white_juan" is the image name
         default:
             print("Unknown horse selected")
         }
