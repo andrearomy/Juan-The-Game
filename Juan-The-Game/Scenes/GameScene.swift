@@ -663,27 +663,20 @@ class GameScene: SKScene {
         let node = atPoint(touch.location(in: self))
         
         if node.name == "Pause" {
-            
-            UserDefaults.standard.setValue(true, forKey: "isPaused")
-            isPaused = true
-            playGameMusic.run(SKAction.pause())
-            createPausePanel() // Crea il pannello di pausa
-            
-        } else if node.name == "Resume" {
-            
-            isPaused = false
-            playGameMusic.run(SKAction.play())
-            pausePanel?.removeFromParent() // Rimuovi il pannello di pausa
-            
-        } else if node.name == "Exit"{
-            if !isMusicMuted {
-                            playGameMusic.run(SKAction.play())
-                        }
-                        pausePanel?.removeFromParent()
-            let menuScene = MenuScene.init(size: view!.bounds.size)
-            view?.presentScene(menuScene)
-            
-        } else if node.name == "Mute" {
+                    UserDefaults.standard.setValue(true, forKey: "isPaused")
+                    isPaused = true
+                    playGameMusic.run(SKAction.pause())
+                    createPausePanel()
+                } else if node.name == "Resume" {
+                    isPaused = false
+                    if !isMusicMuted {
+                        playGameMusic.run(SKAction.play())
+                    }
+                    pausePanel?.removeFromParent()
+                } else if node.name == "Exit" {
+                    let menuScene = MenuScene.init(size: view!.bounds.size)
+                    view?.presentScene(menuScene)
+                } else if node.name == "Mute" {
                     muteButton.isHidden = true
                     unmuteButton.isHidden = false
                     isMusicMuted = true
@@ -693,14 +686,12 @@ class GameScene: SKScene {
                     unmuteButton.isHidden = true
                     isMusicMuted = false
                     playGameMusic.run(SKAction.play())
-            
-        } else if !isGameStarted {
-            horse.physicsBody?.velocity.dy = frame.size.height * 1.2 - horse.position.y
-            isGameStarted = true
-            run(playJumpSound)
-            
-        }
-    }
+                } else if !isGameStarted {
+                    horse.physicsBody?.velocity.dy = frame.size.height * 1.2 - horse.position.y
+                    isGameStarted = true
+                    run(playJumpSound)
+                }
+            }
 }
 
 extension GameScene: SKPhysicsContactDelegate {

@@ -55,7 +55,7 @@ class ShopScene: SKScene {
             selectButton.text = "Select"
             selectButton.fontSize = 16
             selectButton.fontColor = SKColor.green
-            selectButton.position = CGPoint(x: position.x + 100, y: position.y)
+            selectButton.position = CGPoint(x: position.x, y: position.y - 80)
             selectButton.name = "\(horseName)_selectButton"
             addChild(selectButton)
         }
@@ -99,11 +99,11 @@ class ShopScene: SKScene {
     
     func addHorseNodes() {
         // Add the four horse nodes with different prices
-        addHorseNode(name: "horse", price: 0, position: CGPoint(x: frame.midX, y: frame.midY + 200))
-        addHorseNode(name: "black_juan", price: 15, position: CGPoint(x: frame.midX, y: frame.midY + 100))
-        addHorseNode(name: "white_juan", price: 50, position: CGPoint(x: frame.midX, y: frame.midY))
-        addHorseNode(name: "spotted_juan", price: 100, position: CGPoint(x: frame.midX, y: frame.midY - 100))
-        addHorseNode(name: "golden_juan", price: 200, position: CGPoint(x: frame.midX, y: frame.midY - 200))
+        addHorseNode(name: "horse", price: 0, position: CGPoint(x: frame.midX, y: frame.midY - 200))
+        addHorseNode(name: "black_juan", price: 15, position: CGPoint(x: frame.maxX/3, y: frame.maxY/1.5))
+        addHorseNode(name: "white_juan", price: 50, position: CGPoint(x: frame.maxX/3*2, y: frame.maxY/1.5))
+        addHorseNode(name: "spotted_juan", price: 100, position: CGPoint(x: frame.maxX/3, y: frame.maxY/2))
+        addHorseNode(name: "golden_juan", price: 200, position: CGPoint(x: frame.maxX/3*2, y: frame.maxY/2))
     }
     
     func addHorseNode(name: String, price: Int, position: CGPoint) {
@@ -175,7 +175,7 @@ class ShopScene: SKScene {
                 // Transition to the Game Scene
                 transitionToGameScene(with: horseName)
             } else {
-                print("You already purchased this horse")
+                transitionToGameScene(with: horseName)
             }
         } else {
             if coinsCollected >= horsePrice {
@@ -188,7 +188,22 @@ class ShopScene: SKScene {
                 // Update the UI after purchase
                 updateUIAfterPurchase()
             } else {
-                print("Not enough coins to buy this horse")
+                let errorMessage1 = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
+                errorMessage1.text = "You don't have"
+                errorMessage1.fontSize = 25
+                errorMessage1.fontColor = SKColor.red
+                errorMessage1.position = CGPoint(x: frame.midX, y: frame.maxY-100)
+                addChild(errorMessage1)
+                let errorMessage2 = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
+                errorMessage2.text = "enough coins"
+                errorMessage2.fontSize = 25
+                errorMessage2.fontColor = SKColor.red
+                errorMessage2.position = CGPoint(x: frame.midX, y: frame.maxY-130)
+                addChild(errorMessage2)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    errorMessage1.removeFromParent()
+                    errorMessage2.removeFromParent()
+                }
             }
         }
     }
