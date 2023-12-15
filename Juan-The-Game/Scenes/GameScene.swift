@@ -128,7 +128,7 @@ class GameScene: SKScene {
         let coinLabel = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
         coinLabel.text = "\(SKSpriteNode(imageNamed: "coin")) \(coinsCollected)"
         // Display the initial count
-        coinLabel.fontSize = 22
+        coinLabel.fontSize = 20
         coinLabel.fontColor = SKColor.white
         coinLabel.horizontalAlignmentMode = .center
         coinLabel.verticalAlignmentMode = .center
@@ -140,7 +140,7 @@ class GameScene: SKScene {
         let coinLabelShadow = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
         coinLabelShadow.text = "\(SKSpriteNode(imageNamed: "coin")) \(coinsCollected)"
         // Display the initial count
-        coinLabelShadow.fontSize = 22
+        coinLabelShadow.fontSize = 20
         coinLabelShadow.fontColor = SKColor.black
         coinLabelShadow.horizontalAlignmentMode = .center
         coinLabelShadow.verticalAlignmentMode = .center
@@ -533,7 +533,7 @@ class GameScene: SKScene {
         
         platform.removeAllActions()
         platform.alpha = 1.0
-        if Int.random(in: 1...10) == 1{
+        if Int.random(in: 1...80) == 1{
             if Int.random(in: 1...10) == 1 {
                 platform.texture = SKTexture(imageNamed: "duck")
                 updateSizeOf(platform: platform)
