@@ -26,6 +26,7 @@
 		99EAA85C2B2A527900386863 /* duck.wav in Resources */ = {isa = PBXBuildFile; fileRef = 99EAA8582B2A527900386863 /* duck.wav */; };
 		99EAA85D2B2A527900386863 /* bird.wav in Resources */ = {isa = PBXBuildFile; fileRef = 99EAA8592B2A527900386863 /* bird.wav */; };
 		99EAA85E2B2A527900386863 /* frog.wav in Resources */ = {isa = PBXBuildFile; fileRef = 99EAA85A2B2A527900386863 /* frog.wav */; };
+		BCAC552C2B2C7F2600C334F0 /* explosion.wav in Resources */ = {isa = PBXBuildFile; fileRef = BCAC552B2B2C7F2600C334F0 /* explosion.wav */; };
 		BCC8AC8F2B29D156002046F0 /* pixelfj8pt1.normal.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BCC8AC8E2B29D156002046F0 /* pixelfj8pt1.normal.ttf */; };
 		C28FF2462B2AF0CD00127615 /* gameMusic.wav in Resources */ = {isa = PBXBuildFile; fileRef = C28FF2452B2AF0CD00127615 /* gameMusic.wav */; };
 		C2C7AF1C2B20954B00317321 /* SampleCode.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C2C7AF1B2B20954B00317321 /* SampleCode.xcconfig */; };
@@ -52,6 +53,7 @@
 		99EAA8582B2A527900386863 /* duck.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = duck.wav; sourceTree = "<group>"; };
 		99EAA8592B2A527900386863 /* bird.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bird.wav; sourceTree = "<group>"; };
 		99EAA85A2B2A527900386863 /* frog.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = frog.wav; sourceTree = "<group>"; };
+		BCAC552B2B2C7F2600C334F0 /* explosion.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = explosion.wav; sourceTree = "<group>"; };
 		BCC8AC8E2B29D156002046F0 /* pixelfj8pt1.normal.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = pixelfj8pt1.normal.ttf; sourceTree = "<group>"; };
 		C28FF2452B2AF0CD00127615 /* gameMusic.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gameMusic.wav; sourceTree = "<group>"; };
 		C2C7AF1B2B20954B00317321 /* SampleCode.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = SampleCode.xcconfig; path = "Juan-The-Game/SampleCode.xcconfig"; sourceTree = SOURCE_ROOT; };
@@ -133,6 +135,7 @@
 				996EDDD42B1F95D900F134B3 /* jump.wav */,
 				996EDDD32B1F95D900F134B3 /* superJump.wav */,
 				C28FF2452B2AF0CD00127615 /* gameMusic.wav */,
+				BCAC552B2B2C7F2600C334F0 /* explosion.wav */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -205,6 +208,7 @@
 				996EDDDA2B1F95D900F134B3 /* gameOver.wav in Resources */,
 				990F07E82B2B0F7700489055 /* coin.wav in Resources */,
 				BCC8AC8F2B29D156002046F0 /* pixelfj8pt1.normal.ttf in Resources */,
+				BCAC552C2B2C7F2600C334F0 /* explosion.wav in Resources */,
 				996EDDD72B1F95D900F134B3 /* superJump.wav in Resources */,
 				C2C7AF1C2B20954B00317321 /* SampleCode.xcconfig in Resources */,
 				99EAA85D2B2A527900386863 /* bird.wav in Resources */,
@@ -379,7 +383,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UU6556PJ33;
+				DEVELOPMENT_TEAM = 85TW94Y6A7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Juan-The-Game/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -392,7 +396,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.matteo-cotena.Juan-The-Game";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.giovanniborriello.Juan-The-Game";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SAMPLE_CODE_DISAMBIGUATOR = "";
@@ -410,7 +414,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UU6556PJ33;
+				DEVELOPMENT_TEAM = 85TW94Y6A7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Juan-The-Game/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -423,7 +427,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.matteo-cotena.Juan-The-Game";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.giovanniborriello.Juan-The-Game";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SAMPLE_CODE_DISAMBIGUATOR = "";
