@@ -379,7 +379,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UU6556PJ33;
+				DEVELOPMENT_TEAM = C79DK4MQTK;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Juan-The-Game/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -410,7 +410,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UU6556PJ33;
+				DEVELOPMENT_TEAM = C79DK4MQTK;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Juan-The-Game/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
