@@ -16,12 +16,12 @@ enum gameState {
 class GameScene: SKScene {
     
     var selectedHorse: String = "" {
-            didSet {
-                // Load the selected horse or configure gameplay based on this value
-                // Example: Load sprite or configure attributes for the selected horse
-                loadSelectedHorse()
-            }
+        didSet {
+            // Load the selected horse or configure gameplay based on this value
+            // Example: Load sprite or configure attributes for the selected horse
+            loadSelectedHorse()
         }
+    }
     
     var purchasedHorse: Horse?
     
@@ -30,6 +30,7 @@ class GameScene: SKScene {
     var platforms = [SKSpriteNode]()
     var bottom = SKShapeNode()
     let scoreLabel = SKLabelNode(text: "Score: 0")
+    let scoreLabelShadow = SKLabelNode(text: "Score: 0")
     var score = 0
     var highestScore = 0
     var isGameStarted = false
@@ -47,14 +48,16 @@ class GameScene: SKScene {
     var startRainbow = false
     var yellowBorder = false
     let coinsKey = "CoinsCollected"
+    let muteButton = SKSpriteNode(imageNamed: "unmuteButton")
+    let unmuteButton = SKSpriteNode(imageNamed: "muteButton")
+    var isMusicMuted: Bool = false
     var coinsCollected = 0 {
         didSet {
             UserDefaults.standard.set(coinsCollected, forKey: "CoinsCollected")
         }
     }
     var rotationStartTime: TimeInterval?
-
-    let scoreLabelBack = SKLabelNode(text: "Score: 0")
+    
     var pausePanel: SKSpriteNode?
     func collectCoin() {
         coinsCollected += 1000
@@ -62,10 +65,12 @@ class GameScene: SKScene {
         
         UserDefaults.standard.set(coinsCollected, forKey: "CoinsCollected")
     }
-
+    
     func updateCoinsLabel() {
         let coinLabel = childNode(withName: "CoinLabel") as? SKLabelNode
         coinLabel?.text = "Coins: \(coinsCollected)"
+        let coinLabelShadow = childNode(withName: "CoinLabelShadow") as? SKLabelNode
+        coinLabelShadow?.text = "Coins: \(coinsCollected)"
     }
     
     func displayTotalCoins() {
@@ -97,6 +102,14 @@ class GameScene: SKScene {
             // Load white_juan horse sprite or configure gameplay accordingly
             print("Loading White Juan")
             horse.texture = SKTexture(imageNamed: "white_juan") // Assuming "white_juan" is the image name
+        case "spotted_juan":
+            // Load white_juan horse sprite or configure gameplay accordingly
+            print("Loading White Juan")
+            horse.texture = SKTexture(imageNamed: "spotted_juan") // Assuming "white_juan" is the image name
+        case "golden_juan":
+            // Load white_juan horse sprite or configure gameplay accordingly
+            print("Loading White Juan")
+            horse.texture = SKTexture(imageNamed: "golden_juan") // Assuming "white_juan" is the image name
         default:
             print("Unknown horse selected")
         }
@@ -114,15 +127,27 @@ class GameScene: SKScene {
         
         let coinLabel = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
         coinLabel.text = "\(SKSpriteNode(imageNamed: "coin")) \(coinsCollected)"
- // Display the initial count
-            coinLabel.fontSize = 24
-            coinLabel.fontColor = SKColor.white
-            coinLabel.horizontalAlignmentMode = .center
-            coinLabel.verticalAlignmentMode = .center
-            coinLabel.position = CGPoint(x: frame.width - 310, y: frame.height - 70)
-            coinLabel.zPosition = ZPositions.ui
-            coinLabel.name = "CoinLabel" // Add a name to reference it later
-            addChild(coinLabel) // Add the coin label as a child
+        // Display the initial count
+        coinLabel.fontSize = 22
+        coinLabel.fontColor = SKColor.white
+        coinLabel.horizontalAlignmentMode = .center
+        coinLabel.verticalAlignmentMode = .center
+        coinLabel.position = CGPoint(x: frame.midX, y: frame.maxY - 100)
+        coinLabel.zPosition = ZPositions.ui
+        coinLabel.name = "CoinLabel" // Add a name to reference it later
+        addChild(coinLabel) // Add the coin label as a child
+        
+        let coinLabelShadow = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
+        coinLabelShadow.text = "\(SKSpriteNode(imageNamed: "coin")) \(coinsCollected)"
+        // Display the initial count
+        coinLabelShadow.fontSize = 22
+        coinLabelShadow.fontColor = SKColor.black
+        coinLabelShadow.horizontalAlignmentMode = .center
+        coinLabelShadow.verticalAlignmentMode = .center
+        coinLabelShadow.position = CGPoint(x: frame.midX+2, y: frame.maxY - 102)
+        coinLabelShadow.zPosition = ZPositions.scoreLabel
+        coinLabelShadow.name = "CoinLabelShadow" // Add a name to reference it later
+        addChild(coinLabelShadow) // Add the coin label as a child
         
         let pauseButton = SKSpriteNode(imageNamed: "pauseButton")
         pauseButton.setScale(0.2)
@@ -165,8 +190,18 @@ class GameScene: SKScene {
         scoreLabel.position = CGPoint(x: frame.midX, y: frame.height - (view?.safeAreaInsets.top ?? 10) - 20)
         scoreLabel.zPosition = ZPositions.scoreLabel
         addChild(scoreLabel)
+        
+        scoreLabelShadow.fontSize = 25
+        scoreLabelShadow.fontName = "PixelFJ8pt1Normal"
+        scoreLabelShadow.fontColor = .black
+        scoreLabelShadow.verticalAlignmentMode = .center
+        scoreLabelShadow.horizontalAlignmentMode = .center // Set to center
+        
+        scoreLabelShadow.position = CGPoint(x: frame.midX+2, y: frame.height - (view?.safeAreaInsets.top ?? 10) - 20 - 2)
+        scoreLabelShadow.zPosition = ZPositions.scoreLabel-1
+        addChild(scoreLabelShadow)
     }
-
+    
     func spawnHorse() {
         horse.name = "Juan"
         horse.position = CGPoint(x: frame.midX, y: 20 + horse.size.height/2)
@@ -222,7 +257,7 @@ class GameScene: SKScene {
         let menuScene = MenuScene(size: view!.bounds.size)
         view?.presentScene(menuScene)
     }
-
+    
     override func update(_ currentTime: TimeInterval) {
         // Check if the horse is rotating in the x-axis for more than 4 seconds
         if abs(horse.zRotation) > 0.1 {
@@ -231,20 +266,50 @@ class GameScene: SKScene {
             } else {
                 let elapsedTime = currentTime - rotationStartTime!
                 if elapsedTime > 4 {
-                    goToMenuScene()
+                    explodeHorse()
                     rotationStartTime = nil // Reset rotation tracking
                 }
             }
         } else {
             rotationStartTime = nil // Reset rotation tracking if not rotating
         }
-
+        
         checkPhoneTilt()
         if isGameStarted {
             checkHorsePosition()
             checkHorseVelocity()
             updatePlatformsPositions()
             checkYellowBorder()
+        }
+    }
+    
+    func explodeHorse() {
+        // Pause the physics simulation for the horse
+        horse.physicsBody?.isDynamic = false
+        self.horse.isHidden = true
+        
+        let explosionContainer = SKNode()
+        explosionContainer.position = horse.position
+        addChild(explosionContainer)
+        
+        let explosionSprite = SKSpriteNode(imageNamed: "explosion1")
+        explosionSprite.zRotation = 0  // Reset zRotation to zero
+        explosionContainer.addChild(explosionSprite)
+        
+        var explosionAnimation: [SKTexture] = []
+        for i in 1...8 {
+            let frameName = "explosion\(i)"
+            let texture = SKTexture(imageNamed: frameName)
+            explosionAnimation.append(texture)
+        }
+        
+        let animateAction = SKAction.animate(with: explosionAnimation, timePerFrame: 0.1, resize: true, restore: true)
+        let sequence = SKAction.sequence([animateAction])
+        
+        explosionSprite.run(sequence) {
+            explosionContainer.removeFromParent()
+            self.saveScore()
+            self.goToMenuScene()
         }
     }
     
@@ -355,7 +420,7 @@ class GameScene: SKScene {
             }
         }
     }
-
+    
     func checkHorsePosition() {
         let horseWidth = horse.size.width
         if horse.position.y+horseWidth < 0 {
@@ -418,8 +483,7 @@ class GameScene: SKScene {
         numberFormatter.locale = Locale(identifier: "en_US")
         let formattedScore = numberFormatter.string(from: NSNumber(value: score))
         scoreLabel.text = "Score: " + (formattedScore ?? "0")
-        
-        scoreLabelBack.text = "Score: " + (formattedScore ?? "0")
+        scoreLabelShadow.text = "Score: " + (formattedScore ?? "0")
     }
     
     func checkHorseVelocity() {
@@ -522,7 +586,7 @@ class GameScene: SKScene {
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.coinCategory
         }
-
+        
         else if Int.random(in: 1...7) == 1 {
             platform.texture = SKTexture(imageNamed: "cloud" + direction)
             updateSizeOf(platform: platform)
@@ -533,7 +597,7 @@ class GameScene: SKScene {
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
         }
-    
+        
         platform.position.y = frame.size.height + platform.frame.size.height/2 + platform.position.y
     }
     
@@ -564,30 +628,53 @@ class GameScene: SKScene {
             horse.position.x = frame.size.width + horseWidth/2-1
         }
     }
-
+    
     func createPausePanel() {
         // Panel
         pausePanel = SKSpriteNode(color: UIColor.black.withAlphaComponent(0.7), size: CGSize(width: frame.width, height: frame.height))
         pausePanel?.position = CGPoint(x: frame.midX, y: frame.midY)
         pausePanel?.zPosition = ZPositions.ui + 1
         addChild(pausePanel!)
-
+        
         let resumeButton = SKSpriteNode(imageNamed: "resumeButton")
         resumeButton.setScale(0.4)
         resumeButton.zPosition = ZPositions.ui + 2
         resumeButton.name = "Resume"
         pausePanel?.addChild(resumeButton)
-  
+        
         let exitButton = SKSpriteNode(imageNamed: "exitButton")
         exitButton.setScale(0.4)
         exitButton.zPosition = ZPositions.ui + 2
         exitButton.name = "Exit"
         pausePanel?.addChild(exitButton)
-
+        
+        muteButton.setScale(0.4)
+                muteButton.zPosition = ZPositions.ui + 2
+                muteButton.name = "Mute"
+                pausePanel?.addChild(muteButton)
+                
+                // Unmute Button
+        //        let unmuteButton = SKSpriteNode(imageNamed: "unmuteButton")
+                unmuteButton.setScale(0.4)
+                unmuteButton.zPosition = ZPositions.ui + 2
+                unmuteButton.name = "Unmute"
+                pausePanel?.addChild(unmuteButton)
+                
+        //        // Set initial button visibility based on mute state
+        //        muteButton.isHidden = false
+        //        unmuteButton.isHidden = true
+                
+                
+                muteButton.isHidden = isMusicMuted
+                unmuteButton.isHidden = !isMusicMuted
+        
         let buttonSeparation: CGFloat = 50.0 // Adjust this value based on your preference
-        let totalHeight = resumeButton.size.height + buttonSeparation + exitButton.size.height
-        resumeButton.position = CGPoint(x: 0, y: totalHeight / 4)
-        exitButton.position = CGPoint(x: 0, y: -totalHeight / 4)
+        let totalHeight = resumeButton.size.height + buttonSeparation + exitButton.size.height + muteButton.size.height
+
+                resumeButton.position = CGPoint(x: 0, y: totalHeight / 2 - resumeButton.size.height / 2)
+                exitButton.position = CGPoint(x: 0, y: resumeButton.position.y - resumeButton.size.height / 2 - buttonSeparation - exitButton.size.height / 2)
+                muteButton.position = CGPoint(x: 0, y: exitButton.position.y - exitButton.size.height / 2 - buttonSeparation - muteButton.size.height / 2)
+                unmuteButton.position = CGPoint(x: 0, y: exitButton.position.y - exitButton.size.height / 2 - buttonSeparation - muteButton.size.height / 2)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -596,27 +683,33 @@ class GameScene: SKScene {
         let node = atPoint(touch.location(in: self))
         
         if node.name == "Pause" {
-            
             UserDefaults.standard.setValue(true, forKey: "isPaused")
             isPaused = true
             playGameMusic.run(SKAction.pause())
-            createPausePanel() // Crea il pannello di pausa
-            
+            createPausePanel()
         } else if node.name == "Resume" {
-            
             isPaused = false
-            playGameMusic.run(SKAction.play())
-            pausePanel?.removeFromParent() // Rimuovi il pannello di pausa
-            
-        } else if node.name == "Exit"{
+            if !isMusicMuted {
+                playGameMusic.run(SKAction.play())
+            }
+            pausePanel?.removeFromParent()
+        } else if node.name == "Exit" {
             let menuScene = MenuScene.init(size: view!.bounds.size)
             view?.presentScene(menuScene)
-            
+        } else if node.name == "Mute" {
+            muteButton.isHidden = true
+            unmuteButton.isHidden = false
+            isMusicMuted = true
+            playGameMusic.run(SKAction.pause())
+        } else if node.name == "Unmute" {
+            muteButton.isHidden = false
+            unmuteButton.isHidden = true
+            isMusicMuted = false
+            playGameMusic.run(SKAction.play())
         } else if !isGameStarted {
-            horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
+            horse.physicsBody?.velocity.dy = frame.size.height * 1.2 - horse.position.y
             isGameStarted = true
             run(playJumpSound)
-            
         }
     }
 }
