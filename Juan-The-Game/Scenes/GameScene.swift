@@ -41,6 +41,7 @@ class GameScene: SKScene {
     let playDuckSound = SKAction.playSoundFileNamed("duck", waitForCompletion: false)
     let playBirdSound = SKAction.playSoundFileNamed("bird", waitForCompletion: false)
     let playBreakSound = SKAction.playSoundFileNamed("break", waitForCompletion: false)
+    let playExplosionSound = SKAction.playSoundFileNamed("explosion", waitForCompletion: false)
     var isSuperJumpOn = false
     var superJumpCounter: CGFloat = 0
     var playGameMusic = SKAudioNode(fileNamed: "gameMusic")
@@ -266,6 +267,7 @@ class GameScene: SKScene {
             } else {
                 let elapsedTime = currentTime - rotationStartTime!
                 if elapsedTime > 4 {
+                    run(playExplosionSound)
                     explodeHorse()
                     rotationStartTime = nil // Reset rotation tracking
                 }
