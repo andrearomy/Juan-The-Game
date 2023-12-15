@@ -213,7 +213,7 @@ class MenuScene: SKScene {
             
             if touchedNode.name == "playbutton1" {
                 playButtonTapped()
-            } else if touchedNode.name == "shopButton" {
+            } else if touchedNode.name == "shopbutton1" {
                 shopButtonTapped()
             }
         }
