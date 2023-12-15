@@ -37,7 +37,8 @@ class MenuScene: SKScene {
         }
     
     func addShopButton() {
-        let shopButton = SKSpriteNode(imageNamed: "shopButtonImageName")
+        let shopButton = SKSpriteNode(imageNamed: "shopbutton")
+        shopButton.setScale(0.35)
         shopButton.position = CGPoint(x: frame.midX+150, y: frame.midY / 4.5) // Adjust the position as needed
         shopButton.zPosition = ZPositions.logo
         addChild(shopButton)
@@ -45,8 +46,8 @@ class MenuScene: SKScene {
         shopButton.name = "shopButton"
         
         // Add animation or any visual feedback for the button
-        let buttonAnimation = createButtonAnimation()
-        shopButton.run(buttonAnimation)
+//        let buttonAnimation = createButtonAnimation()
+//        shopButton.run(buttonAnimation)
     }
 
     
@@ -152,7 +153,7 @@ class MenuScene: SKScene {
 
     func addPlayButton() {
         let playButton = SKSpriteNode(imageNamed: "playbutton1")
-        playButton.position = CGPoint(x: frame.midX-50, y: frame.midY / 4.5)
+        playButton.position = CGPoint(x: frame.midX-45, y: frame.midY / 4.5)
         playButton.zPosition = ZPositions.logo
         addChild(playButton)
         
