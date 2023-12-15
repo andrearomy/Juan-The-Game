@@ -22,6 +22,13 @@ class ShopScene: SKScene {
     var coinLabel = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
     
     override func didMove(to view: SKView) {
+        
+        let backgroundImage = SKSpriteNode(imageNamed: "bgshop")
+        backgroundImage.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        backgroundImage.size = size
+        backgroundImage.zPosition = -1
+        addChild(backgroundImage)
+        
         displayTotalCoins()
         setupUI()
         addHorseNodes()
@@ -37,7 +44,7 @@ class ShopScene: SKScene {
         // Update UI for purchased horses
         updateUIForPurchasedHorses()
     }
-
+    
     func updateUIForPurchasedHorses() {
         for child in children {
             if let horseNode = child as? SKSpriteNode, let horseName = horseNode.name, let isPurchased = purchasedHorses[horseName], isPurchased {
@@ -51,14 +58,14 @@ class ShopScene: SKScene {
     }
     
     func addSelectButtonForPurchasedHorse(horseName: String, at position: CGPoint) {
-            let selectButton = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
-            selectButton.text = "Select"
-            selectButton.fontSize = 16
-            selectButton.fontColor = SKColor.green
-            selectButton.position = CGPoint(x: position.x, y: position.y - 80)
-            selectButton.name = "\(horseName)_selectButton"
-            addChild(selectButton)
-        }
+        let selectButton = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
+        selectButton.text = "Select"
+        selectButton.fontSize = 16
+        selectButton.fontColor = SKColor.green
+        selectButton.position = CGPoint(x: position.x, y: position.y - 80)
+        selectButton.name = "\(horseName)_selectButton"
+        addChild(selectButton)
+    }
     
     func addBackButton() {
         let backButton = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
@@ -141,24 +148,24 @@ class ShopScene: SKScene {
             }
         }
     }
-
+    
     func handleSelectButtonTap(selectedButton: SKNode) {
-            if let horseName = selectedButton.name?.replacingOccurrences(of: "_selectButton", with: "") {
-                selectedHorseName = horseName // Set selected horse
-                UserDefaults.standard.set(horseName, forKey: "SelectedHorse")
-                print("Selected \(horseName) for gameplay")
-                
-                // Transition to the Game Scene
-                transitionToGameScene(with: horseName)
-            }
+        if let horseName = selectedButton.name?.replacingOccurrences(of: "_selectButton", with: "") {
+            selectedHorseName = horseName // Set selected horse
+            UserDefaults.standard.set(horseName, forKey: "SelectedHorse")
+            print("Selected \(horseName) for gameplay")
+            
+            // Transition to the Game Scene
+            transitionToGameScene(with: horseName)
         }
-
-
+    }
+    
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
             let touchedNode = atPoint(location)
-
+            
             if touchedNode.name == "backButton" {
                 transitionToMenuScene()
             }
@@ -208,14 +215,14 @@ class ShopScene: SKScene {
             }
         }
     }
-
+    
     
     func transitionToGameScene(with horseName: String) {
-            let gameScene = GameScene(size: self.size)
-            gameScene.scaleMode = self.scaleMode
-            gameScene.selectedHorse = horseName // Pass the selected horse
-            view?.presentScene(gameScene, transition: .fade(withDuration: 0.5))
-        }
+        let gameScene = GameScene(size: self.size)
+        gameScene.scaleMode = self.scaleMode
+        gameScene.selectedHorse = horseName // Pass the selected horse
+        view?.presentScene(gameScene, transition: .fade(withDuration: 0.5))
+    }
     
     func updateUIAfterPurchase() {
         updateCoinsLabel()
@@ -235,12 +242,12 @@ class ShopScene: SKScene {
     
     func getPriceForHorse(name: String) -> Int? {
         switch name {
-            case "horse": return 0
-            case "black_juan": return 15
-            case "white_juan": return 50
-            case "spotted_juan": return 100
-            case "golden_juan": return 200
-            default: return nil
+        case "horse": return 0
+        case "black_juan": return 15
+        case "white_juan": return 50
+        case "spotted_juan": return 100
+        case "golden_juan": return 200
+        default: return nil
         }
     }
 }
