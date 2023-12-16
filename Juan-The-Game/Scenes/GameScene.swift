@@ -531,7 +531,8 @@ class GameScene: SKScene {
         
         platform.removeAllActions()
         platform.alpha = 1.0
-        if Int.random(in: 1...25) == 1{
+        
+        if Int.random(in: 1...5) == 1{
             if Int.random(in: 1...10) == 1 {
                 platform.texture = SKTexture(imageNamed: "duck")
                 updateSizeOf(platform: platform)
@@ -548,7 +549,7 @@ class GameScene: SKScene {
                 platform.physicsBody?.categoryBitMask = PhysicsCategories.duck3
             }
         }
-        else if Int.random(in: 1...7) == 1 {
+        else if Int.random(in: 1...5) == 1 {
             platform.texture = SKTexture(imageNamed: "pig" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.pigCategory
@@ -574,7 +575,7 @@ class GameScene: SKScene {
                 animate(platform: platform, isLeft: false)
             }
         }
-        else if Int.random(in: 1...40) == 1 {
+        else if Int.random(in: 1...38) == 1 {
             platform.texture = SKTexture(imageNamed: "platformFrog")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.frogCategory
@@ -585,19 +586,25 @@ class GameScene: SKScene {
             platform.physicsBody?.categoryBitMask = PhysicsCategories.coinCategory
         }
         
-        else if Int.random(in: 1...7) == 1 {
+        else if Int.random(in: 1...5) == 1 {
             platform.texture = SKTexture(imageNamed: "cloud" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.cloudCategory
-        }
-        else {
-            platform.texture = SKTexture(imageNamed: "platform" + direction)
+        } else if score < 4800 {
+                platform.texture = SKTexture(imageNamed: "platform" + direction)
+                updateSizeOf(platform: platform)
+                platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
+        } else if score > 4800 && score < 8700 {
+            platform.texture = SKTexture(imageNamed: "newPlatform" + direction)
+            updateSizeOf(platform: platform)
+            platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
+        } else if score > 8700 {
+            platform.texture = SKTexture(imageNamed: "finalPlatform" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
         }
-        
-        platform.position.y = frame.size.height + platform.frame.size.height/2 + platform.position.y
-    }
+            platform.position.y = frame.size.height + platform.frame.size.height/2 + platform.position.y
+        }
     
     func updateSizeOf(platform: SKSpriteNode) {
         if let textureSize = platform.texture?.size() {
