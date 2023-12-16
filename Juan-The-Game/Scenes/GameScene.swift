@@ -90,6 +90,13 @@ class GameScene: SKScene {
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         layoutScene()
         displayTotalCoins()
+        
+        if let savedSelectedHorse = UserDefaults.standard.string(forKey: "SelectedHorseForGameplay") {
+                    selectedHorse = savedSelectedHorse
+                    print("Using selected horse: \(selectedHorse)")
+                } else {
+                    print("No selected horse found for gameplay")
+                }
     }
     
     func loadSelectedHorse() {

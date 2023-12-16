@@ -43,6 +43,13 @@ class ShopScene: SKScene {
         
         // Update UI for purchased horses
         updateUIForPurchasedHorses()
+        
+        if let savedSelectedHorse = UserDefaults.standard.string(forKey: "SelectedHorse") {
+            selectedHorseName = savedSelectedHorse
+            
+            // Update UI for previously selected horse
+            updateUIForSelectedHorse(horseName: selectedHorseName)
+        }
     }
     
     func updateUIForPurchasedHorses() {
@@ -151,12 +158,29 @@ class ShopScene: SKScene {
     
     func handleSelectButtonTap(selectedButton: SKNode) {
         if let horseName = selectedButton.name?.replacingOccurrences(of: "_selectButton", with: "") {
-            selectedHorseName = horseName // Set selected horse
-            UserDefaults.standard.set(horseName, forKey: "SelectedHorse")
-            print("Selected \(horseName) for gameplay")
-            
-            // Transition to the Game Scene
-            transitionToGameScene(with: horseName)
+            handleHorseInteraction(horsePrice: 0, horseName: horseName) // Call handleHorseInteraction directly
+        }
+    }
+    
+    func updateUIForSelectedHorse(horseName: String) {
+        // Loop through children to find the select button for the selected horse
+        for child in children {
+            if let selectButtonName = child.name, selectButtonName == "\(horseName)_selectButton" {
+                if let selectButton = child as? SKLabelNode {
+                    selectButton.text = "Selected"
+                    selectButton.fontColor = SKColor.blue // Change color or style to indicate selection
+                }
+            }
+        }
+    }
+    
+    func updateOtherSelectButtons(selectedButton: SKLabelNode) {
+        // Loop through children to update other select buttons
+        for child in children {
+            if let otherButton = child as? SKLabelNode, otherButton != selectedButton {
+                otherButton.text = "Select"
+                otherButton.fontColor = SKColor.green // Change color or style to indicate non-selection
+            }
         }
     }
     
@@ -179,21 +203,32 @@ class ShopScene: SKScene {
         if let isPurchased = purchasedHorses[horseName], isPurchased {
             if horseName == selectedHorseName {
                 print("Selected \(horseName) for gameplay")
-                // Transition to the Game Scene
+                // Transition to the Game Scene automatically
                 transitionToGameScene(with: horseName)
             } else {
+                // Update the selected horse and transition to Game Scene automatically
+                selectedHorseName = horseName
+                UserDefaults.standard.set(horseName, forKey: "SelectedHorse")
+                print("Selected \(horseName) for gameplay")
                 transitionToGameScene(with: horseName)
             }
         } else {
+            // Your existing logic for purchasing the horse
             if coinsCollected >= horsePrice {
                 coinsCollected -= horsePrice
                 purchasedHorses[horseName] = true
-                UserDefaults.standard.set(purchasedHorses, forKey: purchasedHorsesKey) // Update purchased horses in UserDefaults
+                UserDefaults.standard.set(purchasedHorses, forKey: purchasedHorsesKey)
                 print("Remaining coins after purchase: \(coinsCollected)")
                 print("Purchased \(horseName)")
                 
                 // Update the UI after purchase
                 updateUIAfterPurchase()
+                
+                // Automatically select and transition to the purchased horse
+                selectedHorseName = horseName
+                UserDefaults.standard.set(horseName, forKey: "SelectedHorse")
+                print("Selected \(horseName) for gameplay")
+                transitionToGameScene(with: horseName)
             } else {
                 print("Not enough coins to buy this horse")
                 let errorMessage1 = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
@@ -215,39 +250,44 @@ class ShopScene: SKScene {
             }
         }
     }
-    
-    
+
+        
     func transitionToGameScene(with horseName: String) {
         let gameScene = GameScene(size: self.size)
         gameScene.scaleMode = self.scaleMode
         gameScene.selectedHorse = horseName // Pass the selected horse
+
+        // Save the selected horse name for gameplay
+        UserDefaults.standard.set(horseName, forKey: "SelectedHorseForGameplay")
+
         view?.presentScene(gameScene, transition: .fade(withDuration: 0.5))
     }
-    
-    func updateUIAfterPurchase() {
-        updateCoinsLabel()
-        // Update the purchased horses and then re-add horse nodes to update "Select" buttons
-        if let savedPurchasedHorses = UserDefaults.standard.dictionary(forKey: purchasedHorsesKey) as? [String: Bool] {
-            purchasedHorses = savedPurchasedHorses
+        
+        
+        func updateUIAfterPurchase() {
+            updateCoinsLabel()
+            // Update the purchased horses and then re-add horse nodes to update "Select" buttons
+            if let savedPurchasedHorses = UserDefaults.standard.dictionary(forKey: purchasedHorsesKey) as? [String: Bool] {
+                purchasedHorses = savedPurchasedHorses
+            }
+            removeAllHorseNodes()
+            addHorseNodes()
         }
-        removeAllHorseNodes()
-        addHorseNodes()
-    }
-    
-    func removeAllHorseNodes() {
-        // Remove all child nodes that are horse nodes
-        let horseNodes = children.filter { $0.name != nil && $0.name!.hasSuffix("_selectButton") }
-        horseNodes.forEach { $0.removeFromParent() }
-    }
-    
-    func getPriceForHorse(name: String) -> Int? {
-        switch name {
-        case "horse": return 0
-        case "black_juan": return 15
-        case "white_juan": return 50
-        case "spotted_juan": return 100
-        case "golden_juan": return 200
-        default: return nil
+        
+        func removeAllHorseNodes() {
+            // Remove all child nodes that are horse nodes
+            let horseNodes = children.filter { $0.name != nil && $0.name!.hasSuffix("_selectButton") }
+            horseNodes.forEach { $0.removeFromParent() }
+        }
+        
+        func getPriceForHorse(name: String) -> Int? {
+            switch name {
+            case "horse": return 0
+            case "black_juan": return 15
+            case "white_juan": return 50
+            case "spotted_juan": return 100
+            case "golden_juan": return 200
+            default: return nil
+            }
         }
     }
-}
