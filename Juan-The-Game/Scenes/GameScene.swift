@@ -110,6 +110,8 @@ class GameScene: SKScene {
             horse.texture = SKTexture(imageNamed: "spotted_juan") // Assuming "white_juan" is the image name
         case "golden_juan":
             horse.texture = SKTexture(imageNamed: "golden_juan") // Assuming "white_juan" is the image name
+        case "horse":
+            horse.texture = SKTexture(imageNamed: "horse")
         default:
             print("Unknown horse selected")
         }
@@ -229,7 +231,7 @@ class GameScene: SKScene {
     }
     
     func makePlatforms() {
-        let spaceBetweenPlatforms = frame.size.height/10
+        let spaceBetweenPlatforms = frame.size.height/13
         for i in 0..<Int(frame.size.height/spaceBetweenPlatforms) {
             let x = CGFloat.random(in: 0...frame.size.width)
             let y = CGFloat.random(in: CGFloat(i)*spaceBetweenPlatforms+10...CGFloat(i+1)*spaceBetweenPlatforms-10)
@@ -532,7 +534,7 @@ class GameScene: SKScene {
         platform.removeAllActions()
         platform.alpha = 1.0
         
-        if Int.random(in: 1...5) == 1{
+        if Int.random(in: 1...9) == 1{
             if Int.random(in: 1...10) == 1 {
                 platform.texture = SKTexture(imageNamed: "duck")
                 updateSizeOf(platform: platform)
@@ -549,7 +551,7 @@ class GameScene: SKScene {
                 platform.physicsBody?.categoryBitMask = PhysicsCategories.duck3
             }
         }
-        else if Int.random(in: 1...5) == 1 {
+        else if Int.random(in: 1...4) == 1 {
             platform.texture = SKTexture(imageNamed: "pig" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.pigCategory
@@ -580,7 +582,7 @@ class GameScene: SKScene {
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.frogCategory
         }
-        else if Int.random(in: 1...6) == 1 {
+        else if Int.random(in: 1...5) == 1 {
             platform.texture = SKTexture(imageNamed: "coin")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.coinCategory
@@ -594,11 +596,11 @@ class GameScene: SKScene {
                 platform.texture = SKTexture(imageNamed: "platform" + direction)
                 updateSizeOf(platform: platform)
                 platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
-        } else if score > 4800 && score < 8700 {
+        } else if score > 4850 && score < 8700 {
             platform.texture = SKTexture(imageNamed: "newPlatform" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
-        } else if score > 8700 {
+        } else if score > 8750 {
             platform.texture = SKTexture(imageNamed: "finalPlatform" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
@@ -728,10 +730,14 @@ extension GameScene: SKPhysicsContactDelegate {
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.cloudCategory {
                     run(playJumpSound)
                     run(playBreakSound)
-                    horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
-                    if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
-                        platform.physicsBody?.categoryBitMask = PhysicsCategories.none
-                        platform.run(SKAction.fadeOut(withDuration: 0.5))
+                    horse.physicsBody?.velocity.dy = frame.size.height * 1.2 - horse.position.y
+                    
+                    if let cloud = (contact.bodyA.node?.name != "Juan") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
+                        cloud.physicsBody?.categoryBitMask = PhysicsCategories.none
+                        cloud.physicsBody?.collisionBitMask = PhysicsCategories.none // Disable collisions with anything
+                        cloud.run(SKAction.fadeOut(withDuration: 0.5)) {
+                            cloud.removeFromParent()
+                        }
                     }
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck {
@@ -745,12 +751,17 @@ extension GameScene: SKPhysicsContactDelegate {
                     }
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.coinCategory {
+                    run(playJumpSound)
                     run(playCoinSound)
+                    horse.physicsBody?.velocity.dy = frame.size.height * 1.2 - horse.position.y
                     collectCoin()
-                    horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
-                    if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
-                        platform.physicsBody?.categoryBitMask = PhysicsCategories.none
-                        platform.run(SKAction.fadeOut(withDuration: 0.5))
+                    
+                    if let coin = (contact.bodyA.node?.name != "Juan") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
+                        coin.physicsBody?.categoryBitMask = PhysicsCategories.none
+                        coin.physicsBody?.collisionBitMask = PhysicsCategories.none // Disable collisions with anything
+                        coin.run(SKAction.fadeOut(withDuration: 0.5)) {
+                            coin.removeFromParent()
+                        }
                     }
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck2 {
@@ -775,14 +786,17 @@ extension GameScene: SKPhysicsContactDelegate {
                         self.superJumpCounter = 0
                     }
                 }
-                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.frogCategory {
+                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.cloudCategory {
                     run(playJumpSound)
-                    run(playFrogSound)
                     run(playBreakSound)
-                    horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
-                    if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
-                        platform.physicsBody?.categoryBitMask = PhysicsCategories.none
-                        platform.run(SKAction.fadeOut(withDuration: 0.5))
+                    horse.physicsBody?.velocity.dy = frame.size.height * 1.2 - horse.position.y
+                    
+                    if let cloud = (contact.bodyA.node?.name != "Juan") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
+                        cloud.physicsBody?.categoryBitMask = PhysicsCategories.none
+                        cloud.physicsBody?.collisionBitMask = PhysicsCategories.none // Disable collisions with anything
+                        cloud.run(SKAction.fadeOut(withDuration: 0.5)) {
+                            cloud.removeFromParent()
+                        }
                     }
                     if let horse = (contact.bodyA.node as? SKSpriteNode)?.name == "Juan" ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
                         let shrinkAction = SKAction.scale(by: 0.5, duration: 0.5)
@@ -801,7 +815,7 @@ extension GameScene: SKPhysicsContactDelegate {
                     run(playJumpSound)
                     run(playBreakSound)
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
-                    if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
+                    if let platform = (contact.bodyA.node?.name != "Juan") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
                         platform.physicsBody?.categoryBitMask = PhysicsCategories.none
                         platform.run(SKAction.fadeOut(withDuration: 0.5))
                     }
