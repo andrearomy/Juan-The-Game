@@ -231,13 +231,14 @@ class GameScene: SKScene {
     }
     
     func makePlatforms() {
-        let spaceBetweenPlatforms = frame.size.height/13
+        let spaceBetweenPlatforms = frame.size.height/10
         for i in 0..<Int(frame.size.height/spaceBetweenPlatforms) {
             let x = CGFloat.random(in: 0...frame.size.width)
             let y = CGFloat.random(in: CGFloat(i)*spaceBetweenPlatforms+10...CGFloat(i+1)*spaceBetweenPlatforms-10)
             spawnPlatform(at: CGPoint(x: x, y: y))
         }
     }
+
     
     func spawnPlatform(at position: CGPoint) {
         var platform = SKSpriteNode()
@@ -534,7 +535,7 @@ class GameScene: SKScene {
         platform.removeAllActions()
         platform.alpha = 1.0
         
-        if Int.random(in: 1...9) == 1{
+        if Int.random(in: 1...10) == 1{
             if Int.random(in: 1...10) == 1 {
                 platform.texture = SKTexture(imageNamed: "duck")
                 updateSizeOf(platform: platform)
@@ -551,7 +552,7 @@ class GameScene: SKScene {
                 platform.physicsBody?.categoryBitMask = PhysicsCategories.duck3
             }
         }
-        else if Int.random(in: 1...4) == 1 {
+        else if Int.random(in: 1...7) == 1 {
             platform.texture = SKTexture(imageNamed: "pig" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.pigCategory
@@ -582,13 +583,12 @@ class GameScene: SKScene {
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.frogCategory
         }
-        else if Int.random(in: 1...5) == 1 {
+        else if Int.random(in: 1...7) == 1 {
             platform.texture = SKTexture(imageNamed: "coin")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.coinCategory
         }
-        
-        else if Int.random(in: 1...5) == 1 {
+        else if Int.random(in: 1...7) == 1 {
             platform.texture = SKTexture(imageNamed: "cloud" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.cloudCategory
@@ -786,7 +786,7 @@ extension GameScene: SKPhysicsContactDelegate {
                         self.superJumpCounter = 0
                     }
                 }
-                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.cloudCategory {
+                else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.frogCategory {
                     run(playJumpSound)
                     run(playBreakSound)
                     horse.physicsBody?.velocity.dy = frame.size.height * 1.2 - horse.position.y
@@ -815,9 +815,12 @@ extension GameScene: SKPhysicsContactDelegate {
                     run(playJumpSound)
                     run(playBreakSound)
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
-                    if let platform = (contact.bodyA.node?.name != "Juan") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
-                        platform.physicsBody?.categoryBitMask = PhysicsCategories.none
-                        platform.run(SKAction.fadeOut(withDuration: 0.5))
+                    if let bird = (contact.bodyA.node?.name != "Juan") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
+                        bird.physicsBody?.categoryBitMask = PhysicsCategories.none
+                        bird.physicsBody?.collisionBitMask = PhysicsCategories.none // Disable collisions with anything
+                        bird.run(SKAction.fadeOut(withDuration: 0.5)) {
+                            bird.removeFromParent()
+                        }
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                         self.isInverted = false
