@@ -36,6 +36,21 @@ class MenuScene: SKScene {
         return repeatAction
     }
     
+    
+    func createShopButtonAnimation() -> SKAction {
+        let buttonFrames = ["shopbutton1", "shopbutton2"]
+        
+        var frames: [SKTexture] = []
+        for frameName in buttonFrames {
+            frames.append(SKTexture(imageNamed: frameName))
+        }
+        
+        let buttonAnimation = SKAction.animate(with: frames, timePerFrame: 0.6)
+        let repeatAction = SKAction.repeatForever(buttonAnimation)
+        
+        return repeatAction
+    }
+    
     func createEyeAnimation() -> SKAction {
         let eyeFrames = ["logo", "logo2"]
         var frames: [SKTexture] = []
@@ -49,13 +64,16 @@ class MenuScene: SKScene {
     
     func addShopButton() {
         let shopButton = SKSpriteNode(imageNamed: "shopbutton")
-        shopButton.setScale(0.35)
-        shopButton.position = CGPoint(x: frame.midX+150, y: frame.midY / 4.5) // Adjust the position as needed
+        shopButton.setScale(0.72)
+        shopButton.position = CGPoint(x: frame.midX+133, y: frame.midY / 4.5) // Adjust the position as needed
         shopButton.zPosition = ZPositions.logo
         addChild(shopButton)
         
-        shopButton.name = "shopButton"
+        shopButton.name = "shopbutton1"
         
+        
+        let buttonShopAnimation = createShopButtonAnimation()
+        shopButton.run(buttonShopAnimation)
         // Add animation or any visual feedback for the button
 //        let buttonAnimation = createButtonAnimation()
 //        shopButton.run(buttonAnimation)
@@ -168,7 +186,7 @@ class MenuScene: SKScene {
     
     func addPlayButton() {
         let playButton = SKSpriteNode(imageNamed: "playbutton1")
-        playButton.position = CGPoint(x: frame.midX-45, y: frame.midY / 4.5)
+        playButton.position = CGPoint(x: frame.midX-58, y: frame.midY / 4.5)
         playButton.zPosition = ZPositions.logo
         addChild(playButton)
         
@@ -195,7 +213,7 @@ class MenuScene: SKScene {
             
             if touchedNode.name == "playbutton1" {
                 playButtonTapped()
-            } else if touchedNode.name == "shopButton" {
+            } else if touchedNode.name == "shopbutton1" {
                 shopButtonTapped()
             }
         }

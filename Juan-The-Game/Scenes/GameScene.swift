@@ -90,34 +90,34 @@ class GameScene: SKScene {
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         layoutScene()
         displayTotalCoins()
+        
+        if let savedSelectedHorse = UserDefaults.standard.string(forKey: "SelectedHorseForGameplay") {
+                    selectedHorse = savedSelectedHorse
+                    print("Using selected horse: \(selectedHorse)")
+                } else {
+                    print("No selected horse found for gameplay")
+                }
     }
     
     func loadSelectedHorse() {
         // Check the value of selectedHorse and load the respective horse in the game
         switch selectedHorse {
         case "black_juan":
-            // Load black_juan horse sprite or configure gameplay accordingly
-            print("Loading Black Juan")
             horse.texture = SKTexture(imageNamed: "black_juan") // Assuming "black_juan" is the image name
         case "white_juan":
-            // Load white_juan horse sprite or configure gameplay accordingly
-            print("Loading White Juan")
             horse.texture = SKTexture(imageNamed: "white_juan") // Assuming "white_juan" is the image name
         case "spotted_juan":
-            // Load white_juan horse sprite or configure gameplay accordingly
-            print("Loading White Juan")
             horse.texture = SKTexture(imageNamed: "spotted_juan") // Assuming "white_juan" is the image name
         case "golden_juan":
-            // Load white_juan horse sprite or configure gameplay accordingly
-            print("Loading White Juan")
             horse.texture = SKTexture(imageNamed: "golden_juan") // Assuming "white_juan" is the image name
+        case "horse":
+            horse.texture = SKTexture(imageNamed: "horse")
         default:
             print("Unknown horse selected")
         }
     }
     
     func layoutScene() {
-        
         playGameMusic.run(SKAction.changeVolume(to: 0.3, duration: 1))
         addBackground()
         addScoreCounter()
@@ -128,7 +128,6 @@ class GameScene: SKScene {
         
         let coinLabel = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
         coinLabel.text = "\(SKSpriteNode(imageNamed: "coin")) \(coinsCollected)"
-        // Display the initial count
         coinLabel.fontSize = 20
         coinLabel.fontColor = SKColor.white
         coinLabel.horizontalAlignmentMode = .center
@@ -137,10 +136,8 @@ class GameScene: SKScene {
         coinLabel.zPosition = ZPositions.ui
         coinLabel.name = "CoinLabel" // Add a name to reference it later
         addChild(coinLabel) // Add the coin label as a child
-        
         let coinLabelShadow = SKLabelNode(fontNamed: "PixelFJ8pt1Normal")
         coinLabelShadow.text = "\(SKSpriteNode(imageNamed: "coin")) \(coinsCollected)"
-        // Display the initial count
         coinLabelShadow.fontSize = 20
         coinLabelShadow.fontColor = SKColor.black
         coinLabelShadow.horizontalAlignmentMode = .center
@@ -159,20 +156,29 @@ class GameScene: SKScene {
     }
     
     func addBackground() {
+        let customPurple = UIColor(
+                red: CGFloat(137) / 255.0,
+                green: CGFloat(53) / 255.0,
+                blue: CGFloat(193) / 255.0,
+                alpha: 1.0
+            ) // Example custom purple color
+        
+        let purpleBackground = SKSpriteNode(color: customPurple, size: self.size)
+        purpleBackground.position = CGPoint(x: frame.midX, y: frame.midY)
+        purpleBackground.zPosition = ZPositions.background - 1 // Ensure it's behind the custom background
         
         let background = SKSpriteNode(imageNamed: "background")
-        
         background.position = CGPoint(x: frame.midX, y: 6500)
         background.zPosition = ZPositions.background
-        
-        background.name = "background" // Assegna un nome univoco
-        
+        background.name = "background" // Assign a unique name
         let originalWidth = background.texture?.size().width ?? 1
         let originalHeight = background.texture?.size().height ?? 1
         let targetWidth = UIScreen.main.bounds.width
         let targetHeight = targetWidth / originalWidth * originalHeight
         background.size = CGSize(width: targetWidth, height: targetHeight)
-        addChild(background)
+        
+        addChild(purpleBackground) // Add custom color background first
+        addChild(background) // Then add the custom background
     }
     
     func goToShopScene() {
@@ -187,17 +193,14 @@ class GameScene: SKScene {
         scoreLabel.fontColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1)
         scoreLabel.verticalAlignmentMode = .center
         scoreLabel.horizontalAlignmentMode = .center // Set to center
-        
         scoreLabel.position = CGPoint(x: frame.midX, y: frame.height - (view?.safeAreaInsets.top ?? 10) - 20)
         scoreLabel.zPosition = ZPositions.scoreLabel
         addChild(scoreLabel)
-        
         scoreLabelShadow.fontSize = 25
         scoreLabelShadow.fontName = "PixelFJ8pt1Normal"
         scoreLabelShadow.fontColor = .black
         scoreLabelShadow.verticalAlignmentMode = .center
         scoreLabelShadow.horizontalAlignmentMode = .center // Set to center
-        
         scoreLabelShadow.position = CGPoint(x: frame.midX+2, y: frame.height - (view?.safeAreaInsets.top ?? 10) - 20 - 2)
         scoreLabelShadow.zPosition = ZPositions.scoreLabel-1
         addChild(scoreLabelShadow)
@@ -235,6 +238,7 @@ class GameScene: SKScene {
             spawnPlatform(at: CGPoint(x: x, y: y))
         }
     }
+
     
     func spawnPlatform(at position: CGPoint) {
         var platform = SKSpriteNode()
@@ -353,13 +357,8 @@ class GameScene: SKScene {
                 
                 let action1 = SKAction.move(to: CGPoint(x: frame.maxX, y: frame.maxY), duration: 0.75)
                 side1.run(action1)
-                
                 let action2 = SKAction.move(to: CGPoint(x: frame.maxX, y: -frame.maxY), duration: 0.75)
-                
-                
                 let action3 = SKAction.move(to: CGPoint(x: -frame.maxX, y: 0), duration: 0.75)
-                
-                
                 let action4 = SKAction.move(to: CGPoint(x: 0, y: frame.maxY), duration: 0.75)
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
@@ -535,7 +534,8 @@ class GameScene: SKScene {
         
         platform.removeAllActions()
         platform.alpha = 1.0
-        if Int.random(in: 1...20) == 1{
+        
+        if Int.random(in: 1...4) == 1{
             if Int.random(in: 1...10) == 1 {
                 platform.texture = SKTexture(imageNamed: "duck")
                 updateSizeOf(platform: platform)
@@ -552,7 +552,7 @@ class GameScene: SKScene {
                 platform.physicsBody?.categoryBitMask = PhysicsCategories.duck3
             }
         }
-        else if Int.random(in: 1...7) == 1 {
+        else if Int.random(in: 1...5) == 1 {
             platform.texture = SKTexture(imageNamed: "pig" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.pigCategory
@@ -578,7 +578,7 @@ class GameScene: SKScene {
                 animate(platform: platform, isLeft: false)
             }
         }
-        else if Int.random(in: 1...40) == 1 {
+        else if Int.random(in: 1...15) == 1 {
             platform.texture = SKTexture(imageNamed: "platformFrog")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.frogCategory
@@ -588,20 +588,25 @@ class GameScene: SKScene {
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.coinCategory
         }
-        
-        else if Int.random(in: 1...7) == 1 {
+        else if Int.random(in: 1...5) == 1 {
             platform.texture = SKTexture(imageNamed: "cloud" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.cloudCategory
-        }
-        else {
-            platform.texture = SKTexture(imageNamed: "platform" + direction)
+        } else if score < 4800 {
+                platform.texture = SKTexture(imageNamed: "platform" + direction)
+                updateSizeOf(platform: platform)
+                platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
+        } else if score > 4850 && score < 8700 {
+            platform.texture = SKTexture(imageNamed: "newPlatform" + direction)
+            updateSizeOf(platform: platform)
+            platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
+        } else if score > 8750 {
+            platform.texture = SKTexture(imageNamed: "finalPlatform" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
         }
-        
-        platform.position.y = frame.size.height + platform.frame.size.height/2 + platform.position.y
-    }
+            platform.position.y = frame.size.height + platform.frame.size.height/2 + platform.position.y
+        }
     
     func updateSizeOf(platform: SKSpriteNode) {
         if let textureSize = platform.texture?.size() {
@@ -654,19 +659,10 @@ class GameScene: SKScene {
                 muteButton.zPosition = ZPositions.ui + 2
                 muteButton.name = "Mute"
                 pausePanel?.addChild(muteButton)
-                
-                // Unmute Button
-        //        let unmuteButton = SKSpriteNode(imageNamed: "unmuteButton")
                 unmuteButton.setScale(0.4)
                 unmuteButton.zPosition = ZPositions.ui + 2
                 unmuteButton.name = "Unmute"
                 pausePanel?.addChild(unmuteButton)
-                
-        //        // Set initial button visibility based on mute state
-        //        muteButton.isHidden = false
-        //        unmuteButton.isHidden = true
-                
-                
                 muteButton.isHidden = isMusicMuted
                 unmuteButton.isHidden = !isMusicMuted
         
@@ -737,6 +733,7 @@ extension GameScene: SKPhysicsContactDelegate {
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
                     if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
                         platform.physicsBody?.categoryBitMask = PhysicsCategories.none
+                        platform.physicsBody?.collisionBitMask = PhysicsCategories.none
                         platform.run(SKAction.fadeOut(withDuration: 0.5))
                     }
                 }
@@ -756,6 +753,7 @@ extension GameScene: SKPhysicsContactDelegate {
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
                     if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
                         platform.physicsBody?.categoryBitMask = PhysicsCategories.none
+                        platform.physicsBody?.collisionBitMask = PhysicsCategories.none
                         platform.run(SKAction.fadeOut(withDuration: 0.5))
                     }
                 }
@@ -790,7 +788,7 @@ extension GameScene: SKPhysicsContactDelegate {
                         platform.physicsBody?.categoryBitMask = PhysicsCategories.none
                         platform.run(SKAction.fadeOut(withDuration: 0.5))
                     }
-                    if let horse = (contact.bodyA.node as? SKSpriteNode)?.name == "Juan" ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
+                    if let horse = (contact.bodyA.node as? SKSpriteNode)?.name == "Horse" ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
                         let shrinkAction = SKAction.scale(by: 0.5, duration: 0.5)
                         let revertAction = SKAction.scale(to: 1.0, duration: 0.5)
                         
