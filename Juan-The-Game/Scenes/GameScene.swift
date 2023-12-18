@@ -92,11 +92,11 @@ class GameScene: SKScene {
         displayTotalCoins()
         
         if let savedSelectedHorse = UserDefaults.standard.string(forKey: "SelectedHorseForGameplay") {
-                    selectedHorse = savedSelectedHorse
-                    print("Using selected horse: \(selectedHorse)")
-                } else {
-                    print("No selected horse found for gameplay")
-                }
+            selectedHorse = savedSelectedHorse
+            print("Using selected horse: \(selectedHorse)")
+        } else {
+            print("No selected horse found for gameplay")
+        }
     }
     
     func loadSelectedHorse() {
@@ -157,11 +157,11 @@ class GameScene: SKScene {
     
     func addBackground() {
         let customPurple = UIColor(
-                red: CGFloat(137) / 255.0,
-                green: CGFloat(53) / 255.0,
-                blue: CGFloat(193) / 255.0,
-                alpha: 1.0
-            ) // Example custom purple color
+            red: CGFloat(137) / 255.0,
+            green: CGFloat(53) / 255.0,
+            blue: CGFloat(193) / 255.0,
+            alpha: 1.0
+        ) // Example custom purple color
         
         let purpleBackground = SKSpriteNode(color: customPurple, size: self.size)
         purpleBackground.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -231,14 +231,14 @@ class GameScene: SKScene {
     }
     
     func makePlatforms() {
-        let spaceBetweenPlatforms = frame.size.height/10
+        let spaceBetweenPlatforms = frame.size.height/12
         for i in 0..<Int(frame.size.height/spaceBetweenPlatforms) {
             let x = CGFloat.random(in: 0...frame.size.width)
             let y = CGFloat.random(in: CGFloat(i)*spaceBetweenPlatforms+10...CGFloat(i+1)*spaceBetweenPlatforms-10)
             spawnPlatform(at: CGPoint(x: x, y: y))
         }
     }
-
+    
     
     func spawnPlatform(at position: CGPoint) {
         var platform = SKSpriteNode()
@@ -535,78 +535,81 @@ class GameScene: SKScene {
         platform.removeAllActions()
         platform.alpha = 1.0
         
-        if Int.random(in: 1...4) == 1{
+        if Int.random(in: 1...6) == 1 {
             if Int.random(in: 1...10) == 1 {
                 platform.texture = SKTexture(imageNamed: "duck")
                 updateSizeOf(platform: platform)
                 platform.physicsBody?.categoryBitMask = PhysicsCategories.duck
-            }
-            else if Int.random(in: 1...20) == 1 {
+            } else if Int.random(in: 1...20) == 1 {
                 platform.texture = SKTexture(imageNamed: "duck2")
                 updateSizeOf(platform: platform)
                 platform.physicsBody?.categoryBitMask = PhysicsCategories.duck2
-            }
-            else if Int.random(in: 1...30) == 1 {
+            } else if Int.random(in: 1...30) == 1 {
                 platform.texture = SKTexture(imageNamed: "duck3")
                 updateSizeOf(platform: platform)
                 platform.physicsBody?.categoryBitMask = PhysicsCategories.duck3
             }
-        }
-        else if Int.random(in: 1...5) == 1 {
+        } else if Int.random(in: 1...5) == 1 {
             platform.texture = SKTexture(imageNamed: "pig" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.pigCategory
+            platform.physicsBody?.collisionBitMask = PhysicsCategories.pigCategory
             if direction == "Left" {
                 platform.position.x = 0
                 animate(platform: platform, isLeft: true)
-            }
-            else {
+            } else {
                 platform.position.x = frame.size.width
                 animate(platform: platform, isLeft: false)
             }
-        }
-        else if Int.random(in: 1...35) == 1 {
+        } else if Int.random(in: 1...35) == 1 {
             platform.texture = SKTexture(imageNamed: "platformBird" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.birdCategory
+            platform.physicsBody?.collisionBitMask = PhysicsCategories.birdCategory
             if direction == "Left" {
                 platform.position.x = 0
                 animate(platform: platform, isLeft: true)
-            }
-            else {
+            } else {
                 platform.position.x = frame.size.width
                 animate(platform: platform, isLeft: false)
             }
-        }
-        else if Int.random(in: 1...15) == 1 {
+        } else if Int.random(in: 1...35) == 1 {
             platform.texture = SKTexture(imageNamed: "platformFrog")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.frogCategory
-        }
-        else if Int.random(in: 1...5) == 1 {
+            platform.physicsBody?.collisionBitMask = PhysicsCategories.frogCategory
+        } else if Int.random(in: 1...6) == 1 {
             platform.texture = SKTexture(imageNamed: "coin")
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.coinCategory
-        }
-        else if Int.random(in: 1...5) == 1 {
-            platform.texture = SKTexture(imageNamed: "cloud" + direction)
-            updateSizeOf(platform: platform)
-            platform.physicsBody?.categoryBitMask = PhysicsCategories.cloudCategory
-        } else if score < 4800 {
-                platform.texture = SKTexture(imageNamed: "platform" + direction)
+            platform.physicsBody?.collisionBitMask = PhysicsCategories.coinCategory
+        } else if Int.random(in: 1...6) == 1 {
+            if score > 4800 {
+                platform.texture = SKTexture(imageNamed: "newCloud" + direction)
                 updateSizeOf(platform: platform)
-                platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
-        } else if score > 4850 && score < 8700 {
-            platform.texture = SKTexture(imageNamed: "newPlatform" + direction)
+                platform.physicsBody?.categoryBitMask = PhysicsCategories.cloudCategory
+                platform.physicsBody?.collisionBitMask = PhysicsCategories.cloudCategory
+            } else if score < 4800 {
+                platform.texture = SKTexture(imageNamed: "cloud" + direction)
+                updateSizeOf(platform: platform)
+                platform.physicsBody?.categoryBitMask = PhysicsCategories.cloudCategory
+                platform.physicsBody?.collisionBitMask = PhysicsCategories.cloudCategory
+            }
+        } else if score < 4800 {
+            platform.texture = SKTexture(imageNamed: "platform" + direction)
             updateSizeOf(platform: platform)
             platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
-        } else if score > 8750 {
-            platform.texture = SKTexture(imageNamed: "finalPlatform" + direction)
-            updateSizeOf(platform: platform)
-            platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
-        }
-            platform.position.y = frame.size.height + platform.frame.size.height/2 + platform.position.y
-        }
+    } else if score > 4850 && score < 8700 {
+        platform.texture = SKTexture(imageNamed: "newPlatform" + direction)
+        updateSizeOf(platform: platform)
+        platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
+    } else if score > 8750 {
+        platform.texture = SKTexture(imageNamed: "finalPlatform" + direction)
+        updateSizeOf(platform: platform)
+        platform.physicsBody?.categoryBitMask = PhysicsCategories.platformCategory
+    }
+        platform.position.y = frame.size.height + platform.frame.size.height / 2 + positionY
+    }
     
     func updateSizeOf(platform: SKSpriteNode) {
         if let textureSize = platform.texture?.size() {
@@ -656,23 +659,23 @@ class GameScene: SKScene {
         pausePanel?.addChild(exitButton)
         
         muteButton.setScale(0.4)
-                muteButton.zPosition = ZPositions.ui + 2
-                muteButton.name = "Mute"
-                pausePanel?.addChild(muteButton)
-                unmuteButton.setScale(0.4)
-                unmuteButton.zPosition = ZPositions.ui + 2
-                unmuteButton.name = "Unmute"
-                pausePanel?.addChild(unmuteButton)
-                muteButton.isHidden = isMusicMuted
-                unmuteButton.isHidden = !isMusicMuted
+        muteButton.zPosition = ZPositions.ui + 2
+        muteButton.name = "Mute"
+        pausePanel?.addChild(muteButton)
+        unmuteButton.setScale(0.4)
+        unmuteButton.zPosition = ZPositions.ui + 2
+        unmuteButton.name = "Unmute"
+        pausePanel?.addChild(unmuteButton)
+        muteButton.isHidden = isMusicMuted
+        unmuteButton.isHidden = !isMusicMuted
         
         let buttonSeparation: CGFloat = 50.0 // Adjust this value based on your preference
         let totalHeight = resumeButton.size.height + buttonSeparation + exitButton.size.height + muteButton.size.height
-
-                resumeButton.position = CGPoint(x: 0, y: totalHeight / 2 - resumeButton.size.height / 2)
-                exitButton.position = CGPoint(x: 0, y: resumeButton.position.y - resumeButton.size.height / 2 - buttonSeparation - exitButton.size.height / 2)
-                muteButton.position = CGPoint(x: 0, y: exitButton.position.y - exitButton.size.height / 2 - buttonSeparation - muteButton.size.height / 2)
-                unmuteButton.position = CGPoint(x: 0, y: exitButton.position.y - exitButton.size.height / 2 - buttonSeparation - muteButton.size.height / 2)
+        
+        resumeButton.position = CGPoint(x: 0, y: totalHeight / 2 - resumeButton.size.height / 2)
+        exitButton.position = CGPoint(x: 0, y: resumeButton.position.y - resumeButton.size.height / 2 - buttonSeparation - exitButton.size.height / 2)
+        muteButton.position = CGPoint(x: 0, y: exitButton.position.y - exitButton.size.height / 2 - buttonSeparation - muteButton.size.height / 2)
+        unmuteButton.position = CGPoint(x: 0, y: exitButton.position.y - exitButton.size.height / 2 - buttonSeparation - muteButton.size.height / 2)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -754,7 +757,9 @@ extension GameScene: SKPhysicsContactDelegate {
                     if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
                         platform.physicsBody?.categoryBitMask = PhysicsCategories.none
                         platform.physicsBody?.collisionBitMask = PhysicsCategories.none
-                        platform.run(SKAction.fadeOut(withDuration: 0.5))
+                        platform.run(SKAction.fadeOut(withDuration: 0.5)) {
+                            platform.removeFromParent()
+                        }
                     }
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck2 {
