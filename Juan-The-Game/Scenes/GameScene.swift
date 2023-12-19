@@ -384,7 +384,7 @@ class GameScene: SKScene {
     func checkPhoneTilt() {
         var defaultAcceleration = 9.8
         if let accelerometerData = motionManager.accelerometerData {
-            var xAcceleration = accelerometerData.acceleration.x * 20
+            var xAcceleration = accelerometerData.acceleration.x * 16
             if xAcceleration > defaultAcceleration {
                 xAcceleration = defaultAcceleration
             }
@@ -392,14 +392,14 @@ class GameScene: SKScene {
                 xAcceleration = -defaultAcceleration
             }
             if score > 10000 {
-                xAcceleration = accelerometerData.acceleration.x * 30
+                xAcceleration = accelerometerData.acceleration.x * 25
             }
             else if score > 8000 {
-                xAcceleration = accelerometerData.acceleration.x * 23
-            }else if score > 5000 {
                 xAcceleration = accelerometerData.acceleration.x * 22
+            }else if score > 5000 {
+                xAcceleration = accelerometerData.acceleration.x * 20
             }else if score > 3000 {
-                xAcceleration = accelerometerData.acceleration.x * 21
+                xAcceleration = accelerometerData.acceleration.x * 18
             }
             horse.run(SKAction.rotate(toAngle: CGFloat(-xAcceleration/5), duration: 0.15))
             
