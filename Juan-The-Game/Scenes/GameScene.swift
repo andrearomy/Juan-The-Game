@@ -231,7 +231,7 @@ class GameScene: SKScene {
     }
     
     func makePlatforms() {
-        let spaceBetweenPlatforms = frame.size.height/12
+        let spaceBetweenPlatforms = frame.size.height/13
         for i in 0..<Int(frame.size.height/spaceBetweenPlatforms) {
             let x = CGFloat.random(in: 0...frame.size.width)
             let y = CGFloat.random(in: CGFloat(i)*spaceBetweenPlatforms+10...CGFloat(i+1)*spaceBetweenPlatforms-10)
@@ -735,9 +735,8 @@ extension GameScene: SKPhysicsContactDelegate {
                     run(playBreakSound)
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
                     if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
-                        platform.physicsBody?.categoryBitMask = PhysicsCategories.none
                         platform.physicsBody?.collisionBitMask = PhysicsCategories.none
-                        platform.run(SKAction.fadeOut(withDuration: 0.5))
+                        platform.run(SKAction.fadeOut(withDuration: 0.4))
                     }
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck {
@@ -752,14 +751,12 @@ extension GameScene: SKPhysicsContactDelegate {
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.coinCategory {
                     run(playCoinSound)
-                    collectCoin()
                     horse.physicsBody?.velocity.dy = frame.size.height*1.2 - horse.position.y
                     if let platform = (contact.bodyA.node?.name != "Horse") ? contact.bodyA.node as? SKSpriteNode : contact.bodyB.node as? SKSpriteNode {
                         platform.physicsBody?.categoryBitMask = PhysicsCategories.none
                         platform.physicsBody?.collisionBitMask = PhysicsCategories.none
-                        platform.run(SKAction.fadeOut(withDuration: 0.5)) {
-                            platform.removeFromParent()
-                        }
+                        platform.run(SKAction.fadeOut(withDuration: 0.4))
+                        collectCoin()
                     }
                 }
                 else if contactMask == PhysicsCategories.horseCategory | PhysicsCategories.duck2 {
